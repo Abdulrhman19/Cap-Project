@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ElectroHealth</title>
+
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
+
+    <!-- Import font-awesome -->
+    <!-- <script src="https://kit.fontawesome.com/5a05ce74ab.js" crossorigin="anonymous"></script> -->
+
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Start header -->
+        <header>
+            <div class="logo">
+                <img src="{% static 'images/logo_transparent.png' %}" alt="logo">
+            </div>
+
+            <nav class="navbar-nav">
+                <ul>
+                    <li>
+                        <a href="#">Home</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Sign In</a>
+                    </li>
+                    <li>
+                        <a href="#" class="btn btn-primary signup">Sign Up Today</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div id="header-section">
+                <div class="text-area">
+                    <h1>ElectroHealth</h1>
+                    <div>
+                        <p>
+                            What if you can see your doctor and your full health data
+                            while you are sitting on the couch, well <span>ElectroHealth</span>
+                            is here to make it possible. with <span>ElectroHealth</span>
+                            you can do much much more than that.
+                        </p>
+                        <ul>
+                            <li><a href="#" class="btn btn-primary">Sign Up Now</a></li>
+                            <li><a href="#" class="btn btn-secondary">Learn More</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="image-area">
+                    <img src="{% static 'images/illustrations/001.svg' %}">
+                </div>
+            </div>
+
+        </header>
+        <!-- End header -->
+
+        <!-- Start main -->
+        <main>
+    
+            <div class="title-section">
+                <h2 class="medium-title">What is ElectroHealth?</h2>
+                <h1>Learn About ElectroHealth features in just minutes ... </h1>
+            </div>
+            <section class="features-section">
+            <div class="features-area">
+
+                <div class="text-area">
+                    <h1>No need for Regular <span style="color: tomato;"> Check-Ups</span> anymore!</h1>
+                    <div>
+                        <p>
+                            ElectroHealth allows you to monitor your vital signs from home
+                            by wearing some sensors that measure all your vital signs
+                            and send it directly to your doctor.
+                        </p>
+                        <ul>
+                    </div>
+                </div>
+
+                <div class="image-area">
+                    <img src="{% static 'images/illustrations/003.svg' %}" alt="">
+                </div>
+
+
+                <div class="image-area">
+                    <img src="{% static 'images/illustrations/005.svg' %}" alt="" style="margin-top: -50px;">
+                </div>
+
+                <div class="text-area">
+                    <h1><span style="color: #f59c82;">appoinment</span> reserevations as a blink of an eye!</h1>
+                    <div>
+                        <p>
+                            ElectroHealth not only for health monitoring, it is also
+                            allow you to reserve an appoinment without going to anywhere!
+                            Just a few clicks and booom.
+                        </p>
+                        <ul>
+                    </div>
+                </div>
+
+                <div class="text-area">
+                    <h1>No need to remember your <span style="color: #1c0aeba8;">Dosages</span> timing</h1>
+                    <div>
+                        <p>
+                            All your dosages inclduing amount, frequency, and instructions
+                            are saved and managed by your dotor, and also we will remaind you
+                            about you Dosage time. so don't worry.
+                        </p>
+                        <ul>
+                    </div>
+                </div>
+
+                <div class="image-area">
+                    <img src="{% static 'images/illustrations/007.svg' %}" alt="">
+                </div>
+
+
+            </div>
+            </section>
+
+            <!-- Cards -->
+
+            <div class="title-section">
+                <h2 class="medium-title">Why ElectroHealth?</h2>
+            </div>
+
+            <section class="cards-section">
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-icon"><img src="{% static 'images/icons/icon-003.svg' %}" alt=""></div>
+                        <div class="card-content">
+                            <p> Beacuse your Security is Our Top Priority
+                                we have built the system by using the blockchain technology.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><img src="{% static 'images/icons/icon-004.svg' %}" alt=""></div>
+                        <div class="card-content">
+                            <p>
+                                You have wasted a lot of time by going to clincks for regular
+                                check-ups, beacuse of that we have created this system to save your valuable time.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon"><img src="{% static 'images/icons/icon-005.svg' %}" alt=""></div>
+                        <div class="card-content">
+                            <p>
+                                Commuincate with you doctor instantly from anywhere and at any time.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+        <!-- End main -->
+
+        <footer>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                <path fill="#273036" fill-opacity="1"
+                    d="M0,128L40,154.7C80,181,160,235,240,261.3C320,288,400,288,480,261.3C560,235,640,181,720,138.7C800,96,880,64,960,58.7C1040,53,1120,75,1200,74.7C1280,75,1360,53,1400,42.7L1440,32L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z">
+                </path>
+            </svg>
+
+        </footer>
+    </div>

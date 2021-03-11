@@ -2,59 +2,66 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
+
 
 class UserManager(BaseUserManager):
     # ? create_user( takes all the required fileds )
-    def create_user(self, email, password=None, is_active=True, is_staff, is_admin, is_doctor, is_patient):
-        
+    def create_user(self, email, is_staff, is_admin, is_doctor=False, is_patient=False, password=None, is_active=True):
+
         if not password:
             raise ValueError("Users must have a password")
 
         if not email:
             raise ValueError("Users must have an email address")
-        user_obj = self.model (
-            email = self.normalize_email(email)
+        user_obj = self.model(
+            email=self.normalize_email(email)
         )
         user_obj.set_password(password)
-        user_obj.staff   = is_staff
-        user_obj.admin   = is_admin
-        user_obj.doctor  = is_doctor
+        user_obj.staff = is_staff
+        user_obj.admin = is_admin
+        user_obj.doctor = is_doctor
         user_obj.patient = is_patient
-        user_obj.actvie  = is_active
+        user_obj.actvie = is_active
         user_obj.save(using=self._db)
         return user_obj
 
     def create_staffuser(self,  email, password=None):
-        user = self.create_user(email, password=password=, is_staff=True)
+        user = self.create_user(email, password=password, is_staff=True)
+        return user
 
     def create_superuser(self,  email, password=None):
-        user = self.create_user(email, password=password=, is_admin=True)
+        user = self.create_user(email, password=password, is_admin=True, is_staff=True)
+        return user
 
     def create_patient(self,  email, password=None):
-        user = self.create_user(email, password=password=, is_patient=True)
+        user = self.create_user(email, password=password, is_patient=True)
+        return user
 
     def create_doctor(self,  email, password=None):
-        user = self.create_user(email, password=password=, is_doctor=True)
-    
+        user = self.create_user(email, password=password, is_doctor=True)
+        return user
 
-class User(AbstractBaseUser):    
-    email                = models.EmailField(max_length=255, unique=True)
-    first_name           = models.CharField(max_length=50)
-    last_name            = models.CharField(max_length=50)
-    date_joined          = models.DateTimeField(auto_now_add=True)
-    active               = models.BooleanField(default=True)    #? Can login ?
-    staff                = models.BooleanField(default=False)
-    admin                = models.BooleanField(default=False)
-    patient              = models.BooleanField(default=False)
-    doctor               = models.BooleanField(default=False)    
-    
+
+class User(AbstractBaseUser):
+    email = models.EmailField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    phone_number = PhoneNumberField(blank=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)  # ? Can login ?
+    staff = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False)
+    patient = models.BooleanField(default=False)
+    doctor = models.BooleanField(default=False)
+
     USERNAME_FIELD = 'email'
     # * USERNAME_FIELDS(Email) and Password are required by default
     REQUIRED_FIELDS = []
 
     object = UserManager()
-    
+
     def __str__(self):
         return self.email
 
@@ -63,6 +70,14 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return "%s" % (self.first_name)
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specifit permissions ?"
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        return True
 
     @property
     def is_staff(self):
@@ -84,8 +99,9 @@ class User(AbstractBaseUser):
     def is_doctor(self):
         return self.doctor
 
+
 class Patinet(models.Model):
-    
+
     # TODO: Add doctor
 
     GENDER = (
@@ -93,29 +109,32 @@ class Patinet(models.Model):
         ('F', 'Female'),
     )
 
-    phone_number          = PhoneNumberField()
-    date_of_birth         = models.DateField()
-    age                   = models.IntegerField(default=0)
-    gender                = models.CharField(max_length=6, choices=GENDER)
-    weight                = models.FloatField()
-    height                = models.FloatField()
-    country               = models.CharField(max_length=60)
-    city                  = models.CharField(max_length=60)
-    street                = models.CharField(max_length=60)
+    phone_number = PhoneNumberField()
+    date_of_birth = models.DateField()
+    age = models.IntegerField(default=0)
+    gender = models.CharField(max_length=6, choices=GENDER)
+    weight = models.FloatField()
+    height = models.FloatField()
+    country = models.CharField(max_length=60)
+    city = models.CharField(max_length=60)
+    street = models.CharField(max_length=60)
 
 
 class Doctor(models.Model):
-    specialist            = models.CharField(max_length=255)
+    specialist = models.CharField(max_length=255)
 
 
 class LabTechnician(models.Model):
-    test_case             = models.TextField(max_length=255)
-    test_name             = models.TextField(max_length=255)
-    test_cost             = models.FloatField()
+    test_case = models.TextField(max_length=255)
+    test_name = models.TextField(max_length=255)
+    test_cost = models.FloatField()
 
-    
+
 class Pharmacist(models.Model):
-    drug_presription      = models.TextField(max_length=255)
-    drug_instruction      = models.TextField(max_length=512)
-    drug_cost             = models.FloatField()
-    
+    drug_presription = models.TextField(max_length=255)
+    drug_instruction = models.TextField(max_length=512)
+    drug_cost = models.FloatField()
+
+
+
+# TODO: Create a forms for admin user
