@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
+
+{% block content %}
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <fieldset class="centered-fieldset">
+        {{form | crispy}}
+
+            <button type="submit"
+                class="flex m-auto w-full text-white text-xl bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg mt-2">
+                <span class="m-auto">Sign Up</span>
+            </button>
+        <div>
+            <p class="text-center text-lg text-gray-500 mt-3 self-center ml-5">Already have an account?
+                <a href="{% url 'users:login' %}" class="text-blue-400 hover:text-blue-600">Login</a>
+            </p>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

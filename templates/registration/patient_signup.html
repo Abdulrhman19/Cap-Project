@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load tailwind_filters %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+
+<section class="flex flex-col w-6/12 mt-10 m-auto text-gray-600 body-font">
+    <form action="" method="POST">
+        {% csrf_token %}
+
+        <div class="container mx-md">
+            {{form.as_p}}
+        </div>
+        <button type="submit"
+            class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Sign
+            Up
+        </button>
+        <p class="text-xs text-gray-00 mt-3 self-center">Already have an account?
+            <a href="{% url 'users:login' %}" class="mr-5 text-blue-600 hover:text-blue-900	">Login</a>
+        </p>
+    </form>
+</section>
+
+{% endblock %}

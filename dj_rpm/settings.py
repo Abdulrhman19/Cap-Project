@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'phonenumber_field',
+    'crispy_forms',
+    'crispy_tailwind',
 
 ]
 
@@ -127,3 +129,9 @@ STATICFILES_DIRS = [
 STATIC_ROOT = 'static_root'
 
 AUTH_USER_MODEL = 'users.User'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"

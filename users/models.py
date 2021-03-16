@@ -1,5 +1,6 @@
 
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -45,22 +46,27 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    email = models.EmailField(max_length=255, unique=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    
+    USER_TYPE = (
+        ('Patient', 'Patient'),
+        ('Doctor', 'Doctor'),
+    )
+
+    email        = models.EmailField(max_length=255, unique=True)
+    first_name   = models.CharField(max_length=50)
+    last_name    = models.CharField(max_length=50)
     phone_number = PhoneNumberField(blank=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
-    active = models.BooleanField(default=True)  # ? Can login ?
-    staff = models.BooleanField(default=False)
-    admin = models.BooleanField(default=False)
-    patient = models.BooleanField(default=False)
-    doctor = models.BooleanField(default=False)
+    date_joined  = models.DateTimeField(auto_now_add=True)
+    active       = models.BooleanField(default=True)  # ? Can login?
+    staff        = models.BooleanField(default=False)
+    admin        = models.BooleanField(default=False)
+    role         = models.CharField(max_length=8, choices=USER_TYPE)
 
     USERNAME_FIELD = 'email'
     # * USERNAME_FIELDS(Email) and Password are required by default
     REQUIRED_FIELDS = []
 
-    object = UserManager()
+    objects = UserManager()
 
     def __str__(self):
         return self.email
@@ -78,6 +84,7 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"
         return True
+
 
     @property
     def is_staff(self):
@@ -108,33 +115,40 @@ class Patinet(models.Model):
         ('M', 'Male'),
         ('F', 'Female'),
     )
+    
+    patinet           = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    supervised_by     = models.ForeignKey("Doctor", on_delete=models.CASCADE, blank=True)
+    date_of_birth     = models.DateField()
+    age               = models.PositiveIntegerField(default=0)
+    gender            = models.CharField(max_length=6, choices=GENDER)
+    weight            = models.FloatField()
+    height            = models.FloatField()
+    country           = models.CharField(max_length=60)
+    city              = models.CharField(max_length=60)
+    street            = models.CharField(max_length=60)
 
-    phone_number = PhoneNumberField()
-    date_of_birth = models.DateField()
-    age = models.IntegerField(default=0)
-    gender = models.CharField(max_length=6, choices=GENDER)
-    weight = models.FloatField()
-    height = models.FloatField()
-    country = models.CharField(max_length=60)
-    city = models.CharField(max_length=60)
-    street = models.CharField(max_length=60)
 
+    def __str__(self):
+        return self.patinet
 
 class Doctor(models.Model):
-    specialist = models.CharField(max_length=255)
+    doctor           = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='Doctor')
+    specialist       = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.doctor.email
 
 class LabTechnician(models.Model):
-    test_case = models.TextField(max_length=255)
-    test_name = models.TextField(max_length=255)
-    test_cost = models.FloatField()
+    lab_technician              = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    test_case                   = models.TextField(max_length=255)
+    test_name                   = models.TextField(max_length=255)
+    test_cost                   = models.FloatField()
 
 
 class Pharmacist(models.Model):
-    drug_presription = models.TextField(max_length=255)
-    drug_instruction = models.TextField(max_length=512)
-    drug_cost = models.FloatField()
+    pharmacist              = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    drug_presription        = models.TextField(max_length=255)
+    drug_instruction        = models.TextField(max_length=512)
+    drug_cost               = models.FloatField()
 
 
-
-# TODO: Create a forms for admin user

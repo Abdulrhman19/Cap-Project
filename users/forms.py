@@ -2,7 +2,32 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import get_user_model
 
+from .models import Patinet, Doctor, Pharmacist, LabTechnician
+
 User = get_user_model()
+
+# class UserCreationForm(forms.ModelForm):
+#     # role = forms.ChoiceField(widget=forms.RadioSelect, choices=[(1, 'Patient'), (2, 'Doctor')])
+#     class Meta:
+#         model = User
+#         fields = ('email', 'password, ')
+
+class PatientCreationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = '__all__'
+    class Meta:
+        model  = Patinet
+        fields = '__all__'
+
+class DoctorCreationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = '__all__'
+    class Meta:
+        model  = Doctor
+        fields = '__all__'
+
 
 class UserAdminCreationForm(forms.ModelForm):
     """
@@ -10,11 +35,12 @@ class UserAdminCreationForm(forms.ModelForm):
     fields, plus a repeated password.
     """
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
+    password2 = forms.CharField(
+        label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email', 'first_name', 'last_name', 'role')
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -42,10 +68,11 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'active', 'admin', 'doctor', 'patient')
+        fields = ('email', 'password', 'active', 'admin', 'role')
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value.
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial["password"]
+

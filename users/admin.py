@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
-from .models import User
+from .models import User, Patinet, Doctor, LabTechnician, Pharmacist
 from .forms import UserAdminCreationForm, UserAdminChangeForm
 
 User = get_user_model()
@@ -17,12 +17,12 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'admin', 'doctor', 'patient')
-    list_filter = ('admin', 'patient', 'doctor')
+    list_display = ('email', 'first_name', 'last_name', 'admin', 'role', 'date_joined')
+    list_filter = ('admin', 'role')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'phone_number')}),
-        ('Permissions', {'fields': ('admin', 'active', 'doctor', 'patient')}),
+        ('Permissions', {'fields': ('admin', 'active', 'role',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -40,3 +40,8 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(Group)
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Patinet)
+admin.site.register(Doctor)
+admin.site.register(LabTechnician)
+admin.site.register(Pharmacist)
+
