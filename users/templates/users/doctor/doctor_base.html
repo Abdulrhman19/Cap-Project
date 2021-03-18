@@ -5,8 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-
+    {% if title %}
+    <title>Dashboard - {{ title }}</title>
+    {% else %}
+    <title>Doctor Dashboard</title>
+    {% endif %}
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="/static/css/dashboard_layout.css">
@@ -19,29 +22,32 @@
             <nav>
                 <ul>
                     <li class="search">Search</li>
-                    <li class="logout">Logout</li>
+                    <li><a href="{% url 'users:logout' %}">Logout</a></li>
                 </ul>
             </nav>
         </div>
 
         <div class="menu">
             <ul>
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="{% url 'users:patient_dashboard' %}">Dashboard</a></li>
+                {% if user.is_authenticated %}
                 <li><a href="#">Profile</a></li>
+                {% else %}
+                <li><a href="#">Profile</a></li>
+                {% endif %}
                 <li><a href="#">Notifiactions</a></li>
                 <li><a href="#">Appoinments</a></li>
                 <li><a href="#">Drug schedule</a></li>
-                <li><a href="#">Clincks near me!</a></li>
             </ul>
         </div>
 
 
         <div class="content">
-            content
+            {% block content %} {% endblock %}
         </div>
 
         <div class="footer">
-            footer
+            Hello I an heres
         </div>
 
 

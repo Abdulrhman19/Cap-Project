@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponseRedirect
 from .forms import (
     UserAdminCreationForm,
     # UserCreationForm,
@@ -19,10 +20,10 @@ def landing_page(request):
 
 
 def signup_view(request):
-    form = UserAdminCreationForm()
+    form = UserAdminCreationForm() # GET REQUEST
     if request.method == 'POST':
         form = UserAdminCreationForm(request.POST)
-
+        print(form)
         if form.is_valid():
 
             email = form.cleaned_data['email']
@@ -104,7 +105,6 @@ def doctor_signup_view(request):
 
 
 def login_view(request):
-    print("In the view")
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
@@ -114,10 +114,27 @@ def login_view(request):
             user = authenticate(request, username=username, password=password)
 
             if user is not None:
+                # user: is an email.
                 login(request, user)
-                print("Pass all tests")
+                print(user, type(user))
                 messages.info(request, f"You are now logged in as {username}.")
-                return redirect('/')
+                
+                # If the logged in user is patient redirect them for patient dashboard
+                # other wise to doctor dashboard
+                # TODO: Users [Admin, Doctor, Patient] redirected to patient Dashboard after logging.
+                # TODO: It need's to be fixed by tonight.
+                    
+                if User.objects.get(email=user).admin == True:
+                    # Admin user/admin/'
+                    return redirect('http://127.0.0.1:8000/admin/')
+                elif User.objects.get(email=user).role == 'Patient':
+                    # Patinet user
+                    return redirect('users:patient_dashboard')
+                elif User.objects.get(email=user).role == 'Doctor':
+                    return redirect('users:doctor_dashboard')
+
+
+
             else:
                 messages.error(request, 'Invalid email or password.')
         else:
@@ -132,3 +149,31 @@ def logout_view(request):
     logout(request)
     # messages.info(request, 'You have been logged out.')
     return redirect('/')
+
+
+
+# PATIENT DASHBAORD FUNCTIONS 
+def patient_dashboard(request):
+    return render(request, 'users/patient/dashboard_content.html')
+
+def maps(request):
+    # Return all the clinics in a 'city' in google maps.
+    patient = Patinet.objects.get(pk=1)
+    country = patient.country
+    city = patient.city
+
+    context = {
+        'country': country,
+        'city': city,
+    }
+    return render(request, 'users/patient/map.html', context)
+
+def patient_profile(request):
+    pass
+# END PATIENT VIEWS
+
+
+# DOCTOR DASHBAORD FUNCTIONS 
+def doctor_dashboard(request):
+    return render(request, 'users/doctor/dashboard_content.htm')
+# END DOCTOR VIEWS

@@ -131,6 +131,9 @@ class Patinet(models.Model):
     def __str__(self):
         return self.patinet
 
+    def get_patient_location(self):
+        return f"{self.city}, {self.country}"
+
 class Doctor(models.Model):
     doctor           = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='Doctor')
     specialist       = models.CharField(max_length=255)

@@ -9,4 +9,12 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('register_patient/', views.patient_signup_view, name='patient_signup'),
     path('register_doctor/', views.doctor_signup_view, name='doctor_signup'),
+    
+    # * Patient pages
+    path('patients/dashboard/', views.patient_dashboard, name='patient_dashboard'),
+    path('patients/profile/', views.patient_profile, name='patient_profile'),
+    path('patients/maps/', views.maps, name='maps'),
+
+    # * Doctor pages
+    path('doctors/dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
 ]

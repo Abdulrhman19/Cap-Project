@@ -41,9 +41,9 @@
                         {% if user.role == 'Doctor' %}
                         <a href="#" class="disabled-link username">Hello,Dr.{{user.get_full_name}}</a>
                         {% elif user.role == 'Patient' %}
-                        <a href="#" class="disabled-link username">Hello, Dr.{{user.get_full_name}}</a>
+                        <a href="#" class="disabled-link username">Hello, {{user.get_full_name}}</a>
                         {% else %}
-                        <a href="#" class="disabled-link username">Hello, Admin</a>
+                        <a href="http://127.0.0.1:8000/admin" class="username">Hello, Admin</a>
                         {% endif %}
                         <a href="{% url 'users:logout' %}">Logout</a>
                     <li>

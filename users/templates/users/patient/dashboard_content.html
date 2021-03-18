@@ -1,0 +1,47 @@
+{% extends 'users/patient/patient_base.html' %}
+{% block content %}
+
+<style>
+    .cards {
+        display: flex;
+        border: 1px solid;
+        height: 150px;
+        justify-content: space-around;
+    }
+
+    .card {
+        border: 1px solid;
+        margin: 10px 0px;
+    }
+
+    .my-container {
+        width: 60%;
+    }
+
+    .chart1 {
+        margin: auto;
+        margin-top: 10px;
+        border: 1px solid;
+        width: 100%;
+        /* height:; */
+    }
+</style>
+
+
+<div class="cards">
+    <div class="card">Weight</div>
+    <div class="card">Height</div>
+    <div class="card">Temp</div>
+    <div class="card">blood pressure</div>
+    <div class="card">ANy thing</div>
+</div>
+
+<div class="my-container">
+    <div class="chart1">
+        <h1>Chart 1</h1>
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'appoinments',
     'phonenumber_field',
     'crispy_forms',
     'crispy_tailwind',

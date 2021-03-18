@@ -42,6 +42,6 @@ admin.site.unregister(Group)
 admin.site.register(User, UserAdmin)
 admin.site.register(Patinet)
 admin.site.register(Doctor)
-admin.site.register(LabTechnician)
-admin.site.register(Pharmacist)
+# admin.site.register(LabTechnician)
+# admin.site.register(Pharmacist)
 
