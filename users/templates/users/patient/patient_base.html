@@ -1,3 +1,6 @@
+{% load static %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +14,6 @@
     <title>Patient Dashboard</title>
     {% endif %}
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="/static/css/dashboard_layout.css">
 </head>
 
@@ -21,35 +23,71 @@
         <div class="header">
             <nav>
                 <ul>
-                    <li class="search">Search</li>
-                    <li><a href="{% url 'users:logout' %}">Logout</a></li>
+                    <li class="username">Hello, {{user.get_full_name}}</li>
+                    <a href="{% url 'users:signup' %}"
+                        class="logout inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                        Logout
+                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
                 </ul>
             </nav>
+            <div class="underline">
+                <hr>
+            </div>
         </div>
+        
+        <div class="sidebar">
+    
+            <header class="logo">
+                <img src="{% static 'images/logo_transparent.png' %}" alt="logo">
+            </header>
+                
+            <div>
+                <ul>
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/dashboard.png' %}" alt="">
+                        <a class="nav-link {% if request.path == '/patients/dashboard/' %} active {% endif %}" href="{% url 'users:patient_dashboard' %}">Dashboard</a>
+                    </li>
 
-        <div class="menu">
-            <ul>
-                <li><a href="{% url 'users:patient_dashboard' %}">Dashboard</a></li>
-                {% if user.is_authenticated %}
-                <li><a href="#">Profile</a></li>
-                {% else %}
-                <li><a href="#">Profile</a></li>
-                {% endif %}
-                <li><a href="#">Notifiactions</a></li>
-                <li><a href="#">Appoinments</a></li>
-                <li><a href="#">Drug schedule</a></li>
-                <li><a href="{% url 'users:maps' %}">Clincks near me!</a></li>
-            </ul>
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/user.png' %}" alt="">
+                        <a class="nav-link" href="#">Profile</a>
+
+                    </li>
+
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/appoinment.png' %}" alt="">
+                        <a class="nav-link" href="#">Appoinments</a>
+                    </li>
+
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/bell.png' %}" alt="">
+                        <a class="nav-link" href="#">Notifications</a>
+                    </li>
+
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/drug-schedule.png' %}" alt="">
+                        <a class="nav-link" href="#">Drug Schedule</a>
+                    </li>
+
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/map.png' %}" alt="">
+                        <a class="nav-link {% if request.path == '/patients/maps/' %} active {% endif %}" href="{% url 'users:maps' %}">Clinics near me</a>
+                    </li>
+                </ul>
+            </div>
         </div>
+        
 
 
         <div class="content">
             {% block content %} {% endblock %}
         </div>
 
-        <div class="footer">
-            Hello I an heres
-        </div>
+
 
 
     </div>

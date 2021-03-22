@@ -1,46 +1,215 @@
 {% extends 'users/patient/patient_base.html' %}
+{% load static %}
 {% block content %}
+<link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
-<style>
-    .cards {
-        display: flex;
-        border: 1px solid;
-        height: 150px;
-        justify-content: space-around;
-    }
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" type="text/css">
 
-    .card {
-        border: 1px solid;
-        margin: 10px 0px;
-    }
+<!-- chartjs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+    integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+    crossorigin="anonymous">
+    </script>
+<section>
+    <div class="cards-section">
+        <div class="card">
+            <div class="card-icon">
+                <img src="{% static 'images/icons/body-mass.png' %}" alt="">
+            </div>
+            <hr>
+            <div class="card-content">
+                <h3>{{bmi}} kg/m<sup>2</sup></h3>
+                <h4>Body Mass Index</h4>
+            </div>
+        </div>
 
-    .my-container {
-        width: 60%;
-    }
+        <div class="card">
+            <div class="card-icon">
+                <img src="{% static 'images/icons/diabetes-test.png' %}" alt="">
+            </div>
+            <hr>
 
-    .chart1 {
-        margin: auto;
-        margin-top: 10px;
-        border: 1px solid;
-        width: 100%;
-        /* height:; */
-    }
-</style>
+            <div class="card-content">
+                <h3>{{diabetes_level}} mg/dl</h3>
+                <h4>Blood Suger</h4>
+            </div>
+        </div>
 
+        <div class="card">
+            <div class="card-icon">
+                <img src="{% static 'images/icons/blood-pressure.png' %}" alt="">
+            </div>
+            <hr>
 
-<div class="cards">
-    <div class="card">Weight</div>
-    <div class="card">Height</div>
-    <div class="card">Temp</div>
-    <div class="card">blood pressure</div>
-    <div class="card">ANy thing</div>
-</div>
+            <div class="card-content">
+                <h3>{{blood_pressure.systolic}}/{{blood_pressure.diastolic}} mmHg</h3>
+                <h4>Blood Pressure</h4>
+            </div>
+        </div>
 
-<div class="my-container">
-    <div class="chart1">
-        <h1>Chart 1</h1>
+        <div class="card">
+            <div class="card-icon">
+                <img src="{% static 'images/icons/height.png' %}" alt="">
+            </div>
+            <hr>
+
+            <div class="card-content">
+                <h3>{{height}} cm</h3>
+                <h4>Height</h4>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">
+                <img src="{% static 'images/icons/scale.png' %}" alt="">
+            </div>
+            <hr>
+            <div class="card-content">
+                <h3>{{weight}} kg</h3>
+                <h4>Weight</h4>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">
+                <img src="{% static 'images/icons/running.png' %}" alt="">
+            </div>
+            <hr>
+            <div class="card-content">
+                <h3>{{steps}}</h3>
+                <h4>Steps</h4>
+            </div>
+        </div>
+
     </div>
-</div>
+    <!--End cards-->
+</section>
+
+
+<section class="charts-section">
+    <div class="main-chart">
+        <canvas id="heart-chart" style="width: 500px;"></canvas>
+        <script>
+            var ctx = document.getElementById('heart-chart').getContext("2d")
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                    datasets: [{
+                        label: "Heart-Rate",
+                        borderColor: "rgba(255, 99, 132, 0.9)",
+                        pointBorderColor: "rgba(255, 99, 132, 0.9)",
+                        pointBackgroundColor: "rgba(255, 99, 132, 0.9)",
+                        pointHoverBackgroundColor: "rgba(255, 99, 132, 0.9)",
+                        pointHoverBorderColor: "rgba(255, 99, 132, 0.1)",
+                        pointBorderWidth: 10,
+                        pointHoverRadius: 10,
+                        pointHoverBorderWidth: 10,
+                        pointRadius: 3,
+                        fill: false,
+                        borderWidth: 2,
+                        data: [66, 110, 90, 122, 190, 133, 110],
+                    }]
+                },
+                options: {
+                    legend: {
+                        position: "bottom"
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                fontColor: "rgba(0,0,0,0.5)",
+                                fontStyle: "bold",
+                                beginAtZero: true,
+                                maxTicksLimit: 13,
+                                padding: 20,
+                            },
+                            gridLines: {
+                                drawTicks: true,
+                                display: false
+                            }
+                        }],
+                        xAxes: [{
+                            gridLines: {
+                                zeroLineColor: "rgba(0,0,0,0.1)"
+                            },
+                            ticks: {
+                                padding: 20,
+                                fontColor: "rgba(0,0,0,0.5)",
+                                fontStyle: "bold"
+                            }
+                        }]
+                    }
+                }
+            });
+
+
+            myChart.canvas.parentNode.style.height = '70%';
+            myChart.canvas.parentNode.style.width = '70%';
+        </script>
+    </div>
+
+    <div class="secondary-chart">
+        <div class="chart">
+            <canvas id="second-chart" style="width: 500px;"></canvas>
+            <script>
+                var ctx = document.getElementById('second-chart');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                        datasets: [{
+                            label: 'Heart Rate',
+                            data: [66, 110, 90, 122, 150, 133, 110],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+
+                            ],
+                        }]
+                    },
+                    options: {
+
+                    }
+                })
+                // myChart.canvas.parentNode.style.height = '40%';
+                myChart.canvas.parentNode.style.width = '50%';
+            </script>
+        </div>
+
+        <div class="chart">
+            <canvas id="third-chart" style="width: 500px;"></canvas>
+            <script>
+                var ctx = document.getElementById('third-chart');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                        datasets: [{
+                            label: 'Heart Rate',
+                            data: [66, 110, 90, 122, 150, 133, 110],
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+
+                            ],
+                        }]
+                    },
+                    options: {
+
+                    }
+                })
+                // myChart.canvas.parentNode.style.height = '40%';
+                myChart.canvas.parentNode.style.width = '50%';
+            </script>
+        </div>
+    </div>
+
+</section>
 
 
 

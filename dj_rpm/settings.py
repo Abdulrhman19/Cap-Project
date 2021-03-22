@@ -131,6 +131,7 @@ STATIC_ROOT = 'static_root'
 
 AUTH_USER_MODEL = 'users.User'
 
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

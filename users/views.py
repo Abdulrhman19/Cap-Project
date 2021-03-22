@@ -3,6 +3,9 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from random import randint
 from .forms import (
     UserAdminCreationForm,
     # UserCreationForm,
@@ -153,9 +156,40 @@ def logout_view(request):
 
 
 # PATIENT DASHBAORD FUNCTIONS 
+@login_required
 def patient_dashboard(request):
-    return render(request, 'users/patient/dashboard_content.html')
+    current_patient = request.user
+    patient = Patinet.objects.get(patinet=current_patient)
+    
+    gender, height, weight, age = ( 
+        patient.gender,
+        patient.height,
+        patient.weight,
+        patient.age,
+        )
+        
+    # Custom values
+    body_mass_index = round(weight / ((height / 100) ** 2), 2)
+    diabetes_level = randint(140, 200)
+    blood_pressure = {
+        'systolic': randint(120, 140),
+        'diastolic': randint(80, 90),
+    }
+    steps = randint(1000, 10000)
+    
+    context = {
+        'gender': gender,
+        'height': height,
+        'weight': weight,
+        'age': age,
+        'bmi': body_mass_index,
+        'diabetes_level': diabetes_level,
+        'blood_pressure': blood_pressure,
+        'steps': steps,
+    }
+    return render(request, 'users/patient/dashboard_content.html', context)
 
+@login_required
 def maps(request):
     # Return all the clinics in a 'city' in google maps.
     patient = Patinet.objects.get(pk=1)
@@ -167,13 +201,14 @@ def maps(request):
         'city': city,
     }
     return render(request, 'users/patient/map.html', context)
-
+@login_required
 def patient_profile(request):
     pass
 # END PATIENT VIEWS
 
 
 # DOCTOR DASHBAORD FUNCTIONS 
+@login_required
 def doctor_dashboard(request):
     return render(request, 'users/doctor/dashboard_content.htm')
 # END DOCTOR VIEWS

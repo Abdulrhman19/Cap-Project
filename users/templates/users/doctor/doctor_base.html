@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +12,6 @@
     <title>Doctor Dashboard</title>
     {% endif %}
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="/static/css/dashboard_layout.css">
 </head>
 
@@ -21,33 +21,55 @@
         <div class="header">
             <nav>
                 <ul>
-                    <li class="search">Search</li>
-                    <li><a href="{% url 'users:logout' %}">Logout</a></li>
+                    <li class="username">Hello, Dr.{{user.get_full_name}}</li>
+                    <li class="logout"><a href="{% url 'users:logout' %}">Logout</a></li>
                 </ul>
             </nav>
         </div>
 
-        <div class="menu">
+        <div>
             <ul>
-                <li><a href="{% url 'users:patient_dashboard' %}">Dashboard</a></li>
-                {% if user.is_authenticated %}
-                <li><a href="#">Profile</a></li>
-                {% else %}
-                <li><a href="#">Profile</a></li>
-                {% endif %}
-                <li><a href="#">Notifiactions</a></li>
-                <li><a href="#">Appoinments</a></li>
-                <li><a href="#">Drug schedule</a></li>
+                <li>
+                    <img class="link-icon" src="{% static 'images/icons/dashboard_2.png' %}" alt="">
+                    <a href="#">Dashboard</a>
+                </li>
+
+                <li>
+                    {% if user.gender == 'male' %}
+                    <img class="link-icon" src="{% static 'images/icons/male.png' %}" alt="">
+                    {% else %}
+                    <img class="link-icon" src="{% static 'images/icons/icons8-collaboration-100.png' %}" alt="">
+                    {% endif %}
+                    <a href="#">Profile</a>
+
+                </li>
+
+                <li>
+                    <img class="link-icon" src="{% static 'images/icons/checkup.png' %}" alt="">
+                    <a href="#">Appoinments</a>
+                </li>
+
+                <li>
+                    <img class="link-icon" src="{% static 'images/icons/notification.png' %}" alt="">
+                    <a href="#">Notifications</a>
+                </li>
+
+                <li>
+                    <img class="link-icon" src="{% static 'images/icons/medical-appointment.png' %}" alt="">
+                    <a href="#">Drug Schedule</a>
+                </li>
+
+                <li>
+                    <img class="link-icon" src="{% static 'images/icons/map_2.png' %}" alt="">
+                    <a href="{% url 'users:maps' %}">Clinics near me</a>
+                </li>
             </ul>
         </div>
+    </div>
 
 
         <div class="content">
             {% block content %} {% endblock %}
-        </div>
-
-        <div class="footer">
-            Hello I an heres
         </div>
 
 

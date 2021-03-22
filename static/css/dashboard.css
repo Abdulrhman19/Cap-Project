@@ -1,0 +1,127 @@
+:root {
+    /* Colors */
+    --main-bg-color: #e8e7eb4b;
+    --header-bg-color: #c9c8d56c;
+    --primary-btn-bg-color: #6156e7;
+    --secondary-btn-bg-color: #fff;
+    --btn-border-color: #5f56c8;
+    --main-font-color: #3c3c4b;
+  
+    --primary-btn-hover-color: #6256e7c7;
+    --secondary-btn-hover-color: var(--primary-btn-bg-color);
+  
+    /* Fonts */
+    --font-color: #6366F1;
+    --font-color-2: #9CA3AF;
+    --font-stack: "Comfortaa", cursive;
+    --font-height: 1.4em;
+    --title-font-size: 2.4em;
+    --text-font-size: 1.6em;
+
+      /* Border */
+      --border-color: #E5E7EB;
+  }
+
+.cards-section {
+    display: flex;
+    flex-flow: row wrap;
+    height: 150px;
+    justify-content: space-around;
+    margin-top: .5em;
+}
+
+.card {
+    background-color: #fcfefebe;
+    border: 1px solid;
+    margin: 10px 0px;
+    width: 11em;
+    border-radius: .5em;  
+    border: 2px solid var(--border-color); 
+    box-shadow: 
+    .2em .2em var(--border-color),
+    .01em .01em .5em var(--border-color);
+
+}
+
+.card > hr {
+    width: 80%;
+    margin: auto;
+    margin: 1em;
+}
+
+.card-icon {
+    width: 2.3em;
+    margin: auto;
+    margin-top: .5em;
+}
+
+.card-content{
+    width: 80%;
+    margin: auto;
+}
+
+.card-content > h3{
+    text-align: center;
+    color: var(--main-font-color);
+    font-weight: bold;
+    margin-top: -.5em;
+}
+
+.card-content > h4{
+    text-align: center;
+    color: var(--font-color-2);
+    opacity: .7;
+}
+
+.charts-section {
+    margin: auto;
+    border-radius: 1em;
+    width: 100%;
+}
+
+.main-chart  {
+    display: flex;
+    flex-flow: row wrap;
+    /* background-color: rgb(207, 207, 207); */
+    border: 1px solid var(--border-color);
+    width: 70%;
+    height: 11em;
+    margin: auto;
+    margin-top: 2em;
+    font-size: 2em;
+    border-radius: .6em;
+    justify-content: center;
+    align-content: center;
+    background-color: #fcfefebe;
+    box-shadow: 
+    .4em 0 .3em -0.01em var(--border-color),
+    -0.001em 0em .001em 0.02em var(--border-color),
+    0.01em 0em .1em 0.1em var(--border-color);
+
+}
+
+
+
+.secondary-chart {
+    display: flex;
+    width: 70%;
+    gap: 1em;
+    justify-content: space-between;
+    margin: auto;
+    margin-top: .9em;
+    font-size: 2em;    
+}
+
+.secondary-chart .chart {
+    text-align: center;
+    border-radius: .6em;
+    width: 48%;
+    height: 12em;
+    background-color: #fcfefebe;
+    box-shadow: 
+    .4em 0 .3em -0.01em var(--border-color);
+}
+
+.secondary-chart .chart h2 {
+    margin-top: 4em;
+}
