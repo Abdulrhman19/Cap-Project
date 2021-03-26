@@ -129,6 +129,10 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = 'static_root'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = f'{BASE_DIR}/media/'
+
+
 AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = '/login/'

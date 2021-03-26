@@ -1,5 +1,300 @@
 {% extends 'users/doctor/doctor_base.html' %}
+{% load static %}
 {% block content %}
 
-    <h1>All doctor related data placed here!</h1>
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}" type="text/css">
+<!-- chartjs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+    integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+    crossorigin="anonymous">
+    </script>
+
+{% if messages %}
+{% for message in messages %}
+<p>{{message}}</p>
+{% endfor %}
+{% endif %}
+
+
+<div class="content-section">
+
+    <section class="header-section">
+        <div class="user-card shadow">
+            <div class="card-text">
+                <h1>Hello Dr.{{user.get_full_name}}</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
+            </div>
+            <img class="tree-img" src="{% static 'images/icons/trees_2.png' %}" alt="">
+        </div>
+
+        <div class="info-card shadow">
+            <div class="info-detail">
+                <div>
+                    <div class="number first"><span>32</span></div>
+                    <div class="description">Important Tasks</div>
+                </div>
+
+                <div>
+                    <div class="number second"><span>21</span></div>
+                    <div class="description">New Patients</div>
+                </div>
+
+                <div>
+                    <div class="number third"><span>19</span></div>
+                    <div class="description">Alart</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="main-section">
+        <div class="activity-chart ">
+            <canvas class="shadow" id="activity-chart"></canvas>
+            <script>
+                var ctx = document.getElementById('activity-chart').getContext("2d")
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                        datasets: [{
+                            label: "Consultation",
+                            borderColor: "rgba(255, 99, 132, 0.9)",
+                            pointBorderColor: "rgba(255, 99, 132, 0.9)",
+                            pointBackgroundColor: "rgba(255, 99, 132, 0.9)",
+                            pointHoverBackgroundColor: "rgba(255, 99, 132, 0.9)",
+                            pointHoverBorderColor: "rgba(255, 99, 132, 0.1)",
+                            pointBorderWidth: 10,
+                            pointHoverRadius: 10,
+                            pointHoverBorderWidth: 10,
+                            pointRadius: 3,
+                            fill: false,
+                            borderWidth: 2,
+                            data: [40, 28, 43, 63, 41, 60],
+                        }, {
+                            label: "New Patietns",
+                            borderColor: "rgba(	27, 80, 100, 0.9)",
+                            pointBorderColor: "rgba(27, 80, 100, 0.9)",
+                            pointBackgroundColor: "rgba(27, 80, 100, 0.9)",
+                            pointHoverBackgroundColor: "rgba(27, 80, 100, 0.9)",
+                            pointHoverBorderColor: "rgba(27, 80, 100, 0.9)",
+                            pointBorderWidth: 10,
+                            pointHoverRadius: 10,
+                            pointHoverBorderWidth: 10,
+                            pointRadius: 3,
+                            fill: false,
+                            borderWidth: 2,
+                            data: [27, 58, 23, 23, 55, 40],
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            position: "top"
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    fontColor: "rgba(0,0,0,0.5)",
+                                    fontStyle: "bold",
+                                    beginAtZero: true,
+                                    maxTicksLimit: 8,
+                                    padding: 20,
+                                },
+                                gridLines: {
+                                    drawTicks: true,
+                                    display: true
+                                }
+                            }],
+                            xAxes: [{
+                                gridLines: {
+                                    zeroLineColor: "rgba(0,0,0,0.1)"
+                                },
+                                ticks: {
+                                    padding: 20,
+                                    fontColor: "rgba(0,0,0,0.5)",
+                                    fontStyle: "bold"
+                                },
+                                gridLines: {
+                                    drawTicks: true,
+                                    display: false
+                                }
+                            }]
+                        }
+                    }
+                });
+
+
+                myChart.canvas.parentNode.style.height = '40%';
+                myChart.canvas.parentNode.style.width = '63%';
+            </script>
+        </div>
+
+        <div class="detail-card shadow">
+            <h1 class="title">Recent Patients</h1>
+
+            {% if patients %}
+            {% for patient in patients %}
+            <div class="user-detail mb-3">
+                <img class="image rounded-image" src="/media/default.jpg" alt="patient_default_image">
+                <div class="user-detail-cointainer">
+                    <h3 class="user-name">{{patient.patinet.get_full_name}}</h3>
+                    <h4 class="case">Eye Probelm</h4>
+                </div>
+
+                <div class="icons-container">
+                    <a class="mail" href="mailto:{{patient.patinet}}">
+                        <img src="{% static 'images/icons/mail.png' %}" alt="mail">
+                    </a>
+                    <a class="delete" href="{% url 'users:delete_patient' patient.id %}">
+                        <img src="{% static 'images/icons/x-mark.png' %}" alt="mail">
+                    </a>
+                </div>
+            </div>
+
+            {% endfor %}
+            {% else %}
+            <h1 class="no-patients">You have no patients yet.</h1>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="charts-section flex-wrapper">
+        <div class="chart shadow">
+            <h1 class="title">Dieases Report</h1>
+            <canvas id="dieases-report"></canvas>
+            <script>
+                var ctx = document.getElementById("dieases-report");
+                var myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Flo', 'Eye Problem', 'Diabetis', 'Colds'],
+                        datasets: [{
+                            label: 'Dieases Report',
+                            data: [12, 19, 3, 5],
+                            backgroundColor: [
+                                '#e85a79',
+                                '#ffc200',
+                                '#504da6',
+                                '#6fd1f6'
+                            ],
+                            borderColor: [
+                                '#e85a79',
+                                '#ffc200',
+                                '#504da6',
+                                '#6fd1f6'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        legend: {
+                            position: "bottom"
+                        },
+                        layout: {
+                            padding: {
+                                left: 0,
+                                right: 0,
+                                top: 10,
+                                bottom: 10
+                            }
+                        },
+
+                        //cutoutPercentage: 40,
+                        responsive: true,
+
+                    }
+                });
+
+                myChart.canvas.parentNode.style.height = '50%';
+                myChart.canvas.parentNode.style.width = '48%';
+            </script>
+        </div>
+
+        <div class="chart shadow">
+            <h1 class="title">Patients Comes</h1>
+            <canvas id="patients-comes"></canvas>
+            <script>
+                var ctx = document.getElementById("patients-comes");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Male',
+                            data: [24, 20, 30, 42, 52, 30, 19],
+                            backgroundColor: "#2b2db3"
+                        },
+                        {
+                            label: 'Female',
+                            data: [19, 30, 21, 40, 18, 38, 42],
+                            backgroundColor: "#63b8f1"
+                        },
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            position: "bottom"
+                        },
+                        layout: {
+                            padding: {
+                                left: 0,
+                                right: 0,
+                                top: 10,
+                                bottom: 10
+                            }
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    fontColor: "rgba(0,0,0,0.5)",
+                                    fontStyle: "bold",
+                                    beginAtZero: true,
+                                    maxTicksLimit: 8,
+                                    padding: 20,
+                                },
+                                gridLines: {
+                                    drawTicks: true,
+                                    display: true
+                                }
+                            }],
+                            xAxes: [{
+                                gridLines: {
+                                    zeroLineColor: "rgba(0,0,0,0.1)"
+                                },
+                                ticks: {
+                                    padding: 0,
+                                    fontColor: "rgba(0,0,0,0.5)",
+                                    fontStyle: "bold"
+                                },
+                                gridLines: {
+                                    drawTicks: true,
+                                    display: false
+                                }
+                            }]
+                        },
+
+                        //cutoutPercentage: 40,
+                        responsive: true,
+
+                    }
+                });
+
+                myChart.canvas.parentNode.style.height = '50%';
+                myChart.canvas.parentNode.style.width = '48%';
+            </script>
+        </div>
+    </section>
+
+    
+    <section class="charts-section flex-wrapper">
+        <div class="chart">
+                <h1 class="title">Accepted Appoinemnts</h1>
+            </div>
+
+            <div class="chart">
+                <h1 class="title">Pended Appoinemnts</h1>
+            </div>
+    </section>
+
+
+</div>
 {% endblock %}

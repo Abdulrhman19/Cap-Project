@@ -23,8 +23,8 @@
 
 html,
 body {
-    height: 100hv;
-    width:100hv ;
+    height: 100%;
+    width:100%;
     background-color: #f5fbfb;
     margin: 0px;
 }
@@ -44,6 +44,7 @@ body {
 
 .header {
     grid-column: 3 / -1;
+    background-color: rgba(255, 255, 255, 0.842);
 }
 
 .header .underline {

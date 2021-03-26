@@ -17,4 +17,5 @@ urlpatterns = [
 
     # * Doctor pages
     path('doctors/dashboard/', views.doctor_dashboard, name='doctor_dashboard'),
+    path('doctors/delete_patient/<int:patient_id>/', views.delete_patient, name='delete_patient'),
 ]

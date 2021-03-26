@@ -33,7 +33,8 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self,  email, password=None):
-        user = self.create_user(email, password=password, is_admin=True, is_staff=True)
+        user = self.create_user(email, password=password,
+                                is_admin=True, is_staff=True)
         return user
 
     def create_patient(self,  email, password=None):
@@ -46,21 +47,21 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    
+
     USER_TYPE = (
         ('Patient', 'Patient'),
         ('Doctor', 'Doctor'),
     )
 
-    email        = models.EmailField(max_length=255, unique=True)
-    first_name   = models.CharField(max_length=50)
-    last_name    = models.CharField(max_length=50)
+    email = models.EmailField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     phone_number = PhoneNumberField(blank=True)
-    date_joined  = models.DateTimeField(auto_now_add=True)
-    active       = models.BooleanField(default=True)  # ? Can login?
-    staff        = models.BooleanField(default=False)
-    admin        = models.BooleanField(default=False)
-    role         = models.CharField(max_length=8, choices=USER_TYPE)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    active = models.BooleanField(default=True)  # ? Can login?
+    staff = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False)
+    role = models.CharField(max_length=8, choices=USER_TYPE)
 
     USERNAME_FIELD = 'email'
     # * USERNAME_FIELDS(Email) and Password are required by default
@@ -84,7 +85,6 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"
         return True
-
 
     @property
     def is_staff(self):
@@ -115,28 +115,38 @@ class Patinet(models.Model):
         ('M', 'Male'),
         ('F', 'Female'),
     )
-    
-    patinet           = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    supervised_by     = models.ForeignKey("Doctor", on_delete=models.CASCADE, blank=True)
-    date_of_birth     = models.DateField()
-    age               = models.PositiveIntegerField(default=0)
-    gender            = models.CharField(max_length=6, choices=GENDER)
-    weight            = models.FloatField()
-    height            = models.FloatField()
-    country           = models.CharField(max_length=60)
-    city              = models.CharField(max_length=60)
-    street            = models.CharField(max_length=60)
 
+    patinet = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    supervised_by = models.ForeignKey(
+        "Doctor", on_delete=models.CASCADE, blank=True)
+    date_of_birth = models.DateField()
+    age = models.PositiveIntegerField(default=0)
+    gender = models.CharField(max_length=6, choices=GENDER)
+    weight = models.FloatField()
+    height = models.FloatField()
+    country = models.CharField(max_length=60)
+    city = models.CharField(max_length=60)
+    street = models.CharField(max_length=60)
+    # image = models.ImageField("Patient personal image", )
 
     def __str__(self):
-        return self.patinet
+        return self.patinet.email
 
     def get_patient_location(self):
         return f"{self.city}, {self.country}"
 
+
 class Doctor(models.Model):
+    GENDER = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+
     doctor           = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='Doctor')
     specialist       = models.CharField(max_length=255)
+    gender           = models.CharField(max_length=6, choices=GENDER)
+
 
     def __str__(self):
         return self.doctor.email

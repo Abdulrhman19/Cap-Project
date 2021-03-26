@@ -1,4 +1,6 @@
 {% load static %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +14,7 @@
     <title>Doctor Dashboard</title>
     {% endif %}
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/dashboard_layout.css">
+    <link rel="stylesheet" href="{% static 'css/dashboard_layout.css' %}">
 </head>
 
 <body>
@@ -21,56 +23,64 @@
         <div class="header">
             <nav>
                 <ul>
-                    <li class="username">Hello, Dr.{{user.get_full_name}}</li>
-                    <li class="logout"><a href="{% url 'users:logout' %}">Logout</a></li>
+                    <!-- <li class="username">Hello Dr.{{user.get_full_name}}</li> -->
+                    <a href="{% url 'users:logout' %}"
+                        class="logout inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                        Logout
+                        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                        </svg>
+                    </a>
                 </ul>
             </nav>
         </div>
+        
+        <div class="sidebar">
+    
+            <header class="logo">
+                <img src="{% static 'images/logo_transparent.png' %}" alt="logo">
+            </header>
+                
+            <div>
+                <ul>
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/dashboard.png' %}" alt="">
+                        <a class="nav-link {% if request.path == '/doctors/dashboard/' %} active {% endif %}" href="{% url 'users:doctor_dashboard' %}">Dashboard</a>
+                    </li>
 
-        <div>
-            <ul>
-                <li>
-                    <img class="link-icon" src="{% static 'images/icons/dashboard_2.png' %}" alt="">
-                    <a href="#">Dashboard</a>
-                </li>
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/user.png' %}" alt="">
+                        <a class="nav-link" href="#">Profile</a>
 
-                <li>
-                    {% if user.gender == 'male' %}
-                    <img class="link-icon" src="{% static 'images/icons/male.png' %}" alt="">
-                    {% else %}
-                    <img class="link-icon" src="{% static 'images/icons/icons8-collaboration-100.png' %}" alt="">
-                    {% endif %}
-                    <a href="#">Profile</a>
+                    </li>
 
-                </li>
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/appoinment.png' %}" alt="">
+                        <a class="nav-link" href="#">Appoinments</a>
+                    </li>
 
-                <li>
-                    <img class="link-icon" src="{% static 'images/icons/checkup.png' %}" alt="">
-                    <a href="#">Appoinments</a>
-                </li>
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/bell.png' %}" alt="">
+                        <a class="nav-link" href="#">Notifications</a>
+                    </li>
 
-                <li>
-                    <img class="link-icon" src="{% static 'images/icons/notification.png' %}" alt="">
-                    <a href="#">Notifications</a>
-                </li>
+                    <li>
+                        <img class="link-icon" src="{% static 'images/icons/drug-schedule.png' %}" alt="">
+                        <a class="nav-link" href="#">Drug Schedule</a>
+                    </li>
 
-                <li>
-                    <img class="link-icon" src="{% static 'images/icons/medical-appointment.png' %}" alt="">
-                    <a href="#">Drug Schedule</a>
-                </li>
-
-                <li>
-                    <img class="link-icon" src="{% static 'images/icons/map_2.png' %}" alt="">
-                    <a href="{% url 'users:maps' %}">Clinics near me</a>
-                </li>
-            </ul>
+                </ul>
+            </div>
         </div>
-    </div>
+        
 
 
         <div class="content">
             {% block content %} {% endblock %}
         </div>
+
+
 
 
     </div>

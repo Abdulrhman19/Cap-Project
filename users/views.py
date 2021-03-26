@@ -23,7 +23,7 @@ def landing_page(request):
 
 
 def signup_view(request):
-    form = UserAdminCreationForm() # GET REQUEST
+    form = UserAdminCreationForm()  # GET REQUEST
     if request.method == 'POST':
         form = UserAdminCreationForm(request.POST)
         print(form)
@@ -58,7 +58,7 @@ def patient_signup_view(request):
 
         if form.is_valid():
             patient = User.objects.filter(
-                 role='Patient').order_by('-date_joined').first()
+                role='Patient').order_by('-date_joined').first()
             supervised_by = form.cleaned_data['supervised_by']
             date_of_birth = form.cleaned_data['date_of_birth']
             age = form.cleaned_data['age']
@@ -68,7 +68,7 @@ def patient_signup_view(request):
             country = form.cleaned_data['country']
             city = form.cleaned_data['city']
             street = form.cleaned_data['street']
-            
+
             new_patient = Patinet.objects.create(
                 patinet=patient,
                 supervised_by=supervised_by,
@@ -79,7 +79,7 @@ def patient_signup_view(request):
                 height=height,
                 country=country,
                 city=city,
-                street = street,
+                street=street,
             )
 
             Patinet.save(new_patient)
@@ -121,12 +121,12 @@ def login_view(request):
                 login(request, user)
                 print(user, type(user))
                 messages.info(request, f"You are now logged in as {username}.")
-                
+
                 # If the logged in user is patient redirect them for patient dashboard
                 # other wise to doctor dashboard
                 # TODO: Users [Admin, Doctor, Patient] redirected to patient Dashboard after logging.
                 # TODO: It need's to be fixed by tonight.
-                    
+
                 if User.objects.get(email=user).admin == True:
                     # Admin user/admin/'
                     return redirect('http://127.0.0.1:8000/admin/')
@@ -135,8 +135,6 @@ def login_view(request):
                     return redirect('users:patient_dashboard')
                 elif User.objects.get(email=user).role == 'Doctor':
                     return redirect('users:doctor_dashboard')
-
-
 
             else:
                 messages.error(request, 'Invalid email or password.')
@@ -154,20 +152,19 @@ def logout_view(request):
     return redirect('/')
 
 
-
-# PATIENT DASHBAORD FUNCTIONS 
+# PATIENT DASHBAORD FUNCTIONS
 @login_required
 def patient_dashboard(request):
     current_patient = request.user
     patient = Patinet.objects.get(patinet=current_patient)
-    
-    gender, height, weight, age = ( 
+
+    gender, height, weight, age = (
         patient.gender,
         patient.height,
         patient.weight,
         patient.age,
-        )
-        
+    )
+
     # Custom values
     body_mass_index = round(weight / ((height / 100) ** 2), 2)
     diabetes_level = randint(140, 200)
@@ -176,7 +173,7 @@ def patient_dashboard(request):
         'diastolic': randint(80, 90),
     }
     steps = randint(1000, 10000)
-    
+
     context = {
         'gender': gender,
         'height': height,
@@ -188,6 +185,7 @@ def patient_dashboard(request):
         'steps': steps,
     }
     return render(request, 'users/patient/dashboard_content.html', context)
+
 
 @login_required
 def maps(request):
@@ -201,14 +199,33 @@ def maps(request):
         'city': city,
     }
     return render(request, 'users/patient/map.html', context)
+
+
 @login_required
 def patient_profile(request):
     pass
 # END PATIENT VIEWS
 
 
-# DOCTOR DASHBAORD FUNCTIONS 
+# DOCTOR DASHBAORD FUNCTIONS
 @login_required
 def doctor_dashboard(request):
-    return render(request, 'users/doctor/dashboard_content.htm')
+    current_doctor = request.user
+    doctor = Doctor.objects.get(doctor=current_doctor)
+    patients = doctor.patinet_set.all()
+
+    context = {
+        'patients': patients,
+    }
+    return render(request, 'users/doctor/dashboard_content.htm', context)
+
+
+@login_required
+def delete_patient(request, patient_id):
+    print("Inside function")
+    current_doctor = Doctor.objects.get(doctor=request.user)
+    patient = current_doctor.patinet_set.get(id=patient_id)
+    Doctor.delete(patient)
+    messages.success(request, f"{patient} has been removed.")
+    return HttpResponseRedirect(reverse("users:doctor_dashboard"))
 # END DOCTOR VIEWS

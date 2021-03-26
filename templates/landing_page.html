@@ -39,11 +39,11 @@
                     {% if user.is_authenticated %}
                     <li>
                         {% if user.role == 'Doctor' %}
-                        <a href="#" class="disabled-link username">Hello,Dr.{{user.get_full_name}}</a>
+                        <a href="{% url 'users:doctor_dashboard' %}" >Dashboard</a>
                         {% elif user.role == 'Patient' %}
-                        <a href="#" class="disabled-link username">Hello, {{user.get_full_name}}</a>
+                        <a href="{% url 'users:patient_dashboard' %}" >Dashboard</a>
                         {% else %}
-                        <a href="http://127.0.0.1:8000/admin" class="username">Hello, Admin</a>
+                        <a href="http://127.0.0.1:8000/admin">Dashboard</a>
                         {% endif %}
                         <a href="{% url 'users:logout' %}">Logout</a>
                     <li>
@@ -185,14 +185,14 @@
         </main>
         <!-- End main -->
 
-        <!-- <footer>
+        <footer>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
                 <path fill="#273036" fill-opacity="1"
                     d="M0,128L40,154.7C80,181,160,235,240,261.3C320,288,400,288,480,261.3C560,235,640,181,720,138.7C800,96,880,64,960,58.7C1040,53,1120,75,1200,74.7C1280,75,1360,53,1400,42.7L1440,32L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z">
                 </path>
             </svg>
 
-        </footer> -->
+        </footer>
     </div>
     <!-- {% include 'footer.html' %} -->
 </body>

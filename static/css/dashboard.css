@@ -79,6 +79,20 @@
     width: 100%;
 }
 
+.flex-wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 3em;
+}
+
+.flex-wrapper .chart {
+    width: 48%;
+    border-radius: 1em;
+}
+
+
 .main-chart  {
     display: flex;
     flex-flow: row wrap;
@@ -124,4 +138,188 @@
 
 .secondary-chart .chart h2 {
     margin-top: 4em;
+}
+
+.content-section {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+}
+
+.shadow {
+    box-shadow: 
+    .2em .2em var(--border-color),
+    .01em .01em .5em var(--border-color);
+}
+
+
+.header-section {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 1em;
+}
+
+.header-section .user-card {
+    order: -1;
+    display: flex;
+    flex-flow: row wrap;
+    background-color: #6366F1;
+    color: #fff;
+    width: 63%;
+    padding: 1.5em 0 1.5em 2em;
+    border-radius: 1em;
+}
+
+.user-card .card-text {
+    width: 80%;
+}
+
+.user-card .tree-img {
+    order: 1;
+    height: 4em;
+    width: 18%;
+}
+
+.user-card h1 {
+    font-size: 1.7em;
+}
+
+.header-section .info-card {
+    order: 1;
+    width: 35%;
+    border-radius: 1em;
+    background-color: #fcfefebe;
+}
+
+.info-card .info-detail {
+    display: flex;
+    justify-content: space-around;
+    padding-top: .8em;
+}
+
+.info-card .info-detail .number {
+    font-size: 1.8em;
+}
+
+.first{
+    color: #2b2db3;
+}
+
+.second{
+    color: #63b8f1;
+}
+
+.third{
+    color: #f61e5f;
+}
+
+.info-card .info-detail .description {
+    color: var(--font-color-2);
+}
+
+
+.main-section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 3em;
+}
+
+.main-section .activity-chart {
+    width: 63%;
+    border-radius: .5em ;
+}
+
+.activity-chart canvas {
+    border-radius: 1em;
+}
+
+.detail-card {
+    width: 35%;
+    border-radius: 1em;
+}
+
+.title {
+    color: var(--font-color-2);
+    font-size: 1.6em;
+    text-align: center;
+    margin-top: .2em;
+    margin-bottom: 1em;
+    letter-spacing: .1em;
+}
+
+.detail-card .user-detail {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.detail-card .user-detail .image {
+    width: 4em;
+    height: 4em;
+    margin-left: .5em;
+}
+
+.detail-card .user-name {
+    color: var(--main-font-color);
+    margin: .4em 0em 0em .7em;
+    font-size: 1.2em;
+}
+
+.detail-card .user-detail-cointainer {
+    width: 63%;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+
+
+.user-detail-cointainer .case {
+    margin-left: .9em;
+    color: var(--font-color-2);
+    font-size: .9em;    
+}
+
+.user-detail .icons-container {
+    display: flex;
+    justify-content: space-between;
+    width: 3.4em;
+}
+
+.user-detail .icons-container .mail{
+    display: flex;
+    width: 1.3em;
+    height: 1.6em;
+    text-align: center;
+    align-self: center;
+}
+
+.user-detail .icons-container .delete {
+    display: flex;
+    width: 1.3em;
+    height: 1.6em;
+    text-align: center;
+    align-self: center;
+
+}
+
+
+.appoinments-section {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+
+.rounded-image {
+    border-radius: 2em;
+}
+
+
+.no-patients {
+    color:#f61e5f;
+    text-align: center;
+    opacity: .5;
 }
