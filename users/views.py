@@ -13,7 +13,7 @@ from .forms import (
     DoctorCreationForm
 )
 
-from .models import Patinet, Doctor, User, UserManager
+from .models import Patient, Doctor, User, UserManager
 
 User = get_user_model()
 
@@ -38,12 +38,9 @@ def signup_view(request):
             if form.cleaned_data['role'] == 'Patient':
                 patient_signup_view(request)
                 return redirect('/register_patient/')
-                print(form.cleaned_data)
             elif form.cleaned_data['role'] == 'Doctor':
                 doctor_signup_view(request)
                 return redirect('/register_doctor/')
-                print(form.cleaned_data)
-
         else:
             messages.error(request, "You must select a role")
 
@@ -69,8 +66,8 @@ def patient_signup_view(request):
             city = form.cleaned_data['city']
             street = form.cleaned_data['street']
 
-            new_patient = Patinet.objects.create(
-                patinet=patient,
+            new_patient = Patient.objects.create(
+                patient=patient,
                 supervised_by=supervised_by,
                 date_of_birth=date_of_birth,
                 age=age,
@@ -82,10 +79,10 @@ def patient_signup_view(request):
                 street=street,
             )
 
-            Patinet.save(new_patient)
+            patient.save(new_patient)
             return redirect('/login/')
         else:
-            print("Make sure to complete the form before submitting it!")
+            messages.error(request, "Make sure to complete the form before submitting it!")
     return render(request, 'registration/patient_signup.html', {'form': form})
 
 
@@ -131,7 +128,7 @@ def login_view(request):
                     # Admin user/admin/'
                     return redirect('http://127.0.0.1:8000/admin/')
                 elif User.objects.get(email=user).role == 'Patient':
-                    # Patinet user
+                    # patient user
                     return redirect('users:patient_dashboard')
                 elif User.objects.get(email=user).role == 'Doctor':
                     return redirect('users:doctor_dashboard')
@@ -156,7 +153,7 @@ def logout_view(request):
 @login_required
 def patient_dashboard(request):
     current_patient = request.user
-    patient = Patinet.objects.get(patinet=current_patient)
+    patient = Patient.objects.get(patient=current_patient)
 
     gender, height, weight, age = (
         patient.gender,
@@ -190,7 +187,7 @@ def patient_dashboard(request):
 @login_required
 def maps(request):
     # Return all the clinics in a 'city' in google maps.
-    patient = Patinet.objects.get(pk=1)
+    patient = patient.objects.get(pk=1)
     country = patient.country
     city = patient.city
 
@@ -212,7 +209,7 @@ def patient_profile(request):
 def doctor_dashboard(request):
     current_doctor = request.user
     doctor = Doctor.objects.get(doctor=current_doctor)
-    patients = doctor.patinet_set.all()
+    patients = doctor.patient_set.all()
 
     context = {
         'patients': patients,
@@ -224,7 +221,7 @@ def doctor_dashboard(request):
 def delete_patient(request, patient_id):
     print("Inside function")
     current_doctor = Doctor.objects.get(doctor=request.user)
-    patient = current_doctor.patinet_set.get(id=patient_id)
+    patient = current_doctor.patient_set.get(id=patient_id)
     Doctor.delete(patient)
     messages.success(request, f"{patient} has been removed.")
     return HttpResponseRedirect(reverse("users:doctor_dashboard"))

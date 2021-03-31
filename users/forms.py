@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import get_user_model
 
-from .models import Patinet, Doctor, Pharmacist, LabTechnician
+from .models import Patient, Doctor, Pharmacist, LabTechnician
 
 User = get_user_model()
 
@@ -17,7 +17,7 @@ class PatientCreationForm(forms.ModelForm):
         model = User
         fields = '__all__'
     class Meta:
-        model  = Patinet
+        model  = Patient
         fields = '__all__'
 
 class DoctorCreationForm(forms.ModelForm):

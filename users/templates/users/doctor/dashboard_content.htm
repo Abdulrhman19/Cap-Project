@@ -136,12 +136,12 @@
             <div class="user-detail mb-3">
                 <img class="image rounded-image" src="/media/default.jpg" alt="patient_default_image">
                 <div class="user-detail-cointainer">
-                    <h3 class="user-name">{{patient.patinet.get_full_name}}</h3>
+                    <h3 class="user-name">{{patient.patient.get_full_name}}</h3>
                     <h4 class="case">Eye Probelm</h4>
                 </div>
 
                 <div class="icons-container">
-                    <a class="mail" href="mailto:{{patient.patinet}}">
+                    <a class="mail" href="mailto:{{patient.patient}}">
                         <img src="{% static 'images/icons/mail.png' %}" alt="mail">
                     </a>
                     <a class="delete" href="{% url 'users:delete_patient' patient.id %}">

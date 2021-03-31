@@ -1,3 +1,5 @@
 from django.db import models
+from users.models import Doctor, Patient
 
-# Create your models here.
+# class Appoinment(models.Model):
+#     doctor = 

@@ -24,7 +24,7 @@ class UserManager(BaseUserManager):
         user_obj.admin = is_admin
         user_obj.doctor = is_doctor
         user_obj.patient = is_patient
-        user_obj.actvie = is_active
+        user_obj.active = is_active
         user_obj.save(using=self._db)
         return user_obj
 
@@ -107,7 +107,7 @@ class User(AbstractBaseUser):
         return self.doctor
 
 
-class Patinet(models.Model):
+class Patient(models.Model):
 
     # TODO: Add doctor
 
@@ -116,8 +116,8 @@ class Patinet(models.Model):
         ('F', 'Female'),
     )
 
-    patinet = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    patient = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="Patient")
     supervised_by = models.ForeignKey(
         "Doctor", on_delete=models.CASCADE, blank=True)
     date_of_birth = models.DateField()
@@ -131,7 +131,7 @@ class Patinet(models.Model):
     # image = models.ImageField("Patient personal image", )
 
     def __str__(self):
-        return self.patinet.email
+        return self.patient.email
 
     def get_patient_location(self):
         return f"{self.city}, {self.country}"
@@ -157,6 +157,8 @@ class LabTechnician(models.Model):
     test_name                   = models.TextField(max_length=255)
     test_cost                   = models.FloatField()
 
+    def __str__(self):
+        return f"{lab_technician.email}"
 
 class Pharmacist(models.Model):
     pharmacist              = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -164,4 +166,6 @@ class Pharmacist(models.Model):
     drug_instruction        = models.TextField(max_length=512)
     drug_cost               = models.FloatField()
 
+    def __str__(self):
+        return f"{self.pharmacist.em}"
 

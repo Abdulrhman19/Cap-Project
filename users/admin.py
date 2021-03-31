@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 
-from .models import User, Patinet, Doctor, LabTechnician, Pharmacist
+from .models import User, Patient, Doctor, LabTechnician, Pharmacist
 from .forms import UserAdminCreationForm, UserAdminChangeForm
 
 User = get_user_model()
@@ -40,7 +40,7 @@ class UserAdmin(BaseUserAdmin):
 admin.site.unregister(Group)
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Patinet)
+admin.site.register(Patient)
 admin.site.register(Doctor)
 # admin.site.register(LabTechnician)
 # admin.site.register(Pharmacist)
