@@ -25,7 +25,7 @@ html,
 body {
     height: 100%;
     width:100%;
-    background-color: #f5fbfb;
+    background-color: #F9FAFB;
     margin: 0px;
 }
 
@@ -101,9 +101,11 @@ body {
 
 .sidebar div ul li {
     display: flex;
+    flex-flow: row wrap;
     /* justify-content: space-between; */
     margin: auto;
     width: 66%;
+    height: 100%;
     padding: 2em 0;
 }
 
@@ -137,11 +139,42 @@ body {
     height: 1.6em;
     margin-right: .8em;
 }
+
+.appointment-btn-label {
+    display: flex;
+    flex-flow: row wrap;
+    width: 95%;
+    margin: auto;
+    margin-top: 6em;
+    border-radius: .5em;
+    padding: .5em .5em;
+    background-color: #6156e7;
+}
+
+.appointment-btn-label:hover {
+    cursor: pointer;
+    opacity: .8;
+    transition: .5s;
+}
+
+.appointment-link {
+    font-size: 1.2em;
+    color: #fff;
+    width: 90%;
+}
+
+.appointment-icon {
+    margin-top: .4em;
+    width: 10%;
+    height: 1.2em;
+}
+
 /* Menu styles end's here */
 
 .content {
     grid-column: 3 / -1;
     grid-row: 2 / -1;
+    /* border: 1px solid; */
 }
 
 /* .footer {

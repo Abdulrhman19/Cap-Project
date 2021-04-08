@@ -9,12 +9,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if title %}
-    <title>Dashboard - {{ title }}</title>
+    <title>Patient - {{ title }}</title>
     {% else %}
     <title>Patient Dashboard</title>
     {% endif %}
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/dashboard_layout.css' %}">
+
+    <!-- Import TailwindCSS -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -38,18 +41,19 @@
                 <hr>
             </div>
         </div>
-        
+
         <div class="sidebar">
-    
+
             <header class="logo">
                 <img src="{% static 'images/logo_transparent.png' %}" alt="logo">
             </header>
-                
+
             <div>
                 <ul>
                     <li>
                         <img class="link-icon" src="{% static 'images/icons/dashboard.png' %}" alt="">
-                        <a class="nav-link {% if request.path == '/patients/dashboard/' %} active {% endif %}" href="{% url 'users:patient_dashboard' %}">Dashboard</a>
+                        <a class="nav-link {% if request.path == '/patients/dashboard/' %} active {% endif %}"
+                            href="{% url 'users:patient_dashboard' %}">Dashboard</a>
                     </li>
 
                     <li>
@@ -60,7 +64,8 @@
 
                     <li>
                         <img class="link-icon" src="{% static 'images/icons/appoinment.png' %}" alt="">
-                        <a class="nav-link" href="#">Appoinments</a>
+                        <a class="nav-link  {% if request.path == '/new_appointemnt/' %} active {%endif %}"
+                            href="{% url 'appointments:new_appointemnt' %}">Appoinments</a>
                     </li>
 
                     <li>
@@ -75,12 +80,18 @@
 
                     <li>
                         <img class="link-icon" src="{% static 'images/icons/map.png' %}" alt="">
-                        <a class="nav-link {% if request.path == '/patients/maps/' %} active {% endif %}" href="{% url 'users:maps' %}">Clinics near me</a>
+                        <a class="nav-link {% if request.path == '/patients/maps/' %} active {% endif %}"
+                            href="{% url 'users:maps' %}">Clinics near me</a>
                     </li>
                 </ul>
+                
+                <div class="appointment-btn-label">
+                    <a class="appointment-link" href="{% url 'appointments:new_appointemnt' %}">Make an Appointment</a>
+                    <img class="appointment-icon" src="{% static 'images/icons/add.png' %}" alt="">
+                </div>
             </div>
         </div>
-        
+
 
 
         <div class="content">

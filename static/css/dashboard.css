@@ -6,10 +6,10 @@
     --secondary-btn-bg-color: #fff;
     --btn-border-color: #5f56c8;
     --main-font-color: #3c3c4b;
-  
+
     --primary-btn-hover-color: #6256e7c7;
     --secondary-btn-hover-color: var(--primary-btn-bg-color);
-  
+
     /* Fonts */
     --font-color: #6366F1;
     --font-color-2: #9CA3AF;
@@ -18,9 +18,9 @@
     --title-font-size: 2.4em;
     --text-font-size: 1.6em;
 
-      /* Border */
-      --border-color: #E5E7EB;
-  }
+    /* Border */
+    --border-color: #E5E7EB;
+}
 
 .cards-section {
     display: flex;
@@ -28,6 +28,7 @@
     height: 150px;
     justify-content: space-around;
     margin-top: .5em;
+    margin-bottom: 1.7em;
 }
 
 .card {
@@ -35,15 +36,15 @@
     border: 1px solid;
     margin: 10px 0px;
     width: 11em;
-    border-radius: .5em;  
-    border: 2px solid var(--border-color); 
-    box-shadow: 
-    .2em .2em var(--border-color),
-    .01em .01em .5em var(--border-color);
+    border-radius: .5em;
+    border: 2px solid var(--border-color);
+    box-shadow:
+        .2em .2em var(--border-color),
+        .01em .01em .5em var(--border-color);
 
 }
 
-.card > hr {
+.card>hr {
     width: 80%;
     margin: auto;
     margin: 1em;
@@ -55,28 +56,49 @@
     margin-top: .5em;
 }
 
-.card-content{
+.card-content {
     width: 80%;
     margin: auto;
 }
 
-.card-content > h3{
+.card-content>h3 {
     text-align: center;
     color: var(--main-font-color);
     font-weight: bold;
     margin-top: -.5em;
 }
 
-.card-content > h4{
+.card-content>h4 {
     text-align: center;
     color: var(--font-color-2);
     opacity: .7;
 }
 
+
+.main-section {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    margin: auto;
+    border: 1px solid;
+}
+
+.heart-rate-chart {
+    width: 68%;
+    background-color: aquamarine;
+}
+
+.patient-detail-card {
+    width: 28%;
+    /* border: 1px solid; */
+}
+
+
+
 .charts-section {
     margin: auto;
     border-radius: 1em;
-    width: 100%;
+    width: 50%;
 }
 
 .flex-wrapper {
@@ -93,7 +115,7 @@
 }
 
 
-.main-chart  {
+.main-chart {
     display: flex;
     flex-flow: row wrap;
     /* background-color: rgb(207, 207, 207); */
@@ -107,10 +129,10 @@
     justify-content: center;
     align-content: center;
     background-color: #fcfefebe;
-    box-shadow: 
-    .4em 0 .3em -0.01em var(--border-color),
-    -0.001em 0em .001em 0.02em var(--border-color),
-    0.01em 0em .1em 0.1em var(--border-color);
+    box-shadow:
+        .4em 0 .3em -0.01em var(--border-color),
+        -0.001em 0em .001em 0.02em var(--border-color),
+        0.01em 0em .1em 0.1em var(--border-color);
 
 }
 
@@ -123,7 +145,7 @@
     justify-content: space-between;
     margin: auto;
     margin-top: .9em;
-    font-size: 2em;    
+    font-size: 2em;
 }
 
 .secondary-chart .chart {
@@ -132,8 +154,8 @@
     width: 48%;
     height: 12em;
     background-color: #fcfefebe;
-    box-shadow: 
-    .4em 0 .3em -0.01em var(--border-color);
+    box-shadow:
+        .4em 0 .3em -0.01em var(--border-color);
 }
 
 .secondary-chart .chart h2 {
@@ -149,9 +171,9 @@
 }
 
 .shadow {
-    box-shadow: 
-    .2em .2em var(--border-color),
-    .01em .01em .5em var(--border-color);
+    box-shadow:
+        .2em .2em var(--border-color),
+        .01em .01em .5em var(--border-color);
 }
 
 
@@ -205,15 +227,15 @@
     font-size: 1.8em;
 }
 
-.first{
+.first {
     color: #2b2db3;
 }
 
-.second{
+.second {
     color: #63b8f1;
 }
 
-.third{
+.third {
     color: #f61e5f;
 }
 
@@ -231,7 +253,7 @@
 
 .main-section .activity-chart {
     width: 63%;
-    border-radius: .5em ;
+    border-radius: .5em;
 }
 
 .activity-chart canvas {
@@ -257,7 +279,7 @@
     flex-flow: row wrap;
 }
 
-.detail-card .user-detail .image {
+.image {
     width: 4em;
     height: 4em;
     margin-left: .5em;
@@ -280,7 +302,7 @@
 .user-detail-cointainer .case {
     margin-left: .9em;
     color: var(--font-color-2);
-    font-size: .9em;    
+    font-size: .9em;
 }
 
 .user-detail .icons-container {
@@ -289,7 +311,7 @@
     width: 3.4em;
 }
 
-.user-detail .icons-container .mail{
+.user-detail .icons-container .mail {
     display: flex;
     width: 1.3em;
     height: 1.6em;
@@ -319,7 +341,7 @@
 
 
 .no-patients {
-    color:#f61e5f;
+    color: #f61e5f;
     text-align: center;
     opacity: .5;
 }

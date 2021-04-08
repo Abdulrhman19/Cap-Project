@@ -125,6 +125,7 @@ class Patient(models.Model):
     gender = models.CharField(max_length=6, choices=GENDER)
     weight = models.FloatField()
     height = models.FloatField()
+    blood_group = models.CharField(max_length=4)
     country = models.CharField(max_length=60)
     city = models.CharField(max_length=60)
     street = models.CharField(max_length=60)

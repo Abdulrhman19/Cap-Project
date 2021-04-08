@@ -12,7 +12,6 @@ from .forms import (
     PatientCreationForm,
     DoctorCreationForm
 )
-
 from .models import Patient, Doctor, User, UserManager
 
 User = get_user_model()
@@ -48,7 +47,10 @@ def signup_view(request):
 
 
 def patient_signup_view(request):
-    form = PatientCreationForm()
+    initial_data = {
+        'patient': User.objects.last()
+    }
+    form = PatientCreationForm(initial=initial_data)
 
     if request.method == 'POST':
         form = PatientCreationForm(request.POST)
@@ -82,12 +84,16 @@ def patient_signup_view(request):
             patient.save(new_patient)
             return redirect('/login/')
         else:
-            messages.error(request, "Make sure to complete the form before submitting it!")
+            messages.error(
+                request, "Make sure to complete the form before submitting it!")
     return render(request, 'registration/patient_signup.html', {'form': form})
 
 
 def doctor_signup_view(request):
-    form = DoctorCreationForm()
+    initial_data = {
+        'doctor': User.objects.last()
+    }
+    form = DoctorCreationForm(initial=initial_data)
 
     if request.method == 'POST':
         form = DoctorCreationForm(request.POST)
@@ -134,7 +140,7 @@ def login_view(request):
                     return redirect('users:doctor_dashboard')
 
             else:
-                messages.error(request, 'Invalid email or password.')
+                messages.error(request, 'Cannot submit empty instance!')
         else:
             messages.error(request, 'Invalid email or password.')
     else:
@@ -171,7 +177,15 @@ def patient_dashboard(request):
     }
     steps = randint(1000, 10000)
 
+    details_card = {
+        'Age': str(age) + ' Year',
+        'Blood Group': patient.blood_group,
+        'Height': str(height) + ' cm',
+        'Weight': str(weight) + ' kg',
+    }
+
     context = {
+        'patient': patient,
         'gender': gender,
         'height': height,
         'weight': weight,
@@ -180,6 +194,8 @@ def patient_dashboard(request):
         'diabetes_level': diabetes_level,
         'blood_pressure': blood_pressure,
         'steps': steps,
+        'details_card': details_card,
+        'title': 'Dashboard'
     }
     return render(request, 'users/patient/dashboard_content.html', context)
 
@@ -187,13 +203,15 @@ def patient_dashboard(request):
 @login_required
 def maps(request):
     # Return all the clinics in a 'city' in google maps.
-    patient = patient.objects.get(pk=1)
+    current_patient = request.user
+    patient = Patient.objects.get(patient=current_patient)
     country = patient.country
     city = patient.city
 
     context = {
         'country': country,
         'city': city,
+        'title': 'Map'
     }
     return render(request, 'users/patient/map.html', context)
 

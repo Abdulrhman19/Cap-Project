@@ -1,6 +1,26 @@
 {% extends 'users/patient/patient_base.html' %}
 {% load static %}
 {% block content %}
+
+
+{% if messages %}
+{% for msg in messages %}
+<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+    <!-- <strong class="font-bold"></strong> -->
+    <span class="block sm:inline">{{msg}}</span>
+    <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+        <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20">
+            <title>Close</title>
+            <path
+                d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+        </svg>
+    </span>
+</div>
+{% endfor %}
+{% endif %}
+
+
 <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" type="text/css">
@@ -9,7 +29,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
     integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
     crossorigin="anonymous">
-    </script>
+</script>
 <section>
     <div class="cards-section">
         <div class="card">
@@ -47,7 +67,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-icon">
                 <img src="{% static 'images/icons/height.png' %}" alt="">
             </div>
@@ -57,9 +77,9 @@
                 <h3>{{height}} cm</h3>
                 <h4>Height</h4>
             </div>
-        </div>
+        </div> -->
 
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-icon">
                 <img src="{% static 'images/icons/scale.png' %}" alt="">
             </div>
@@ -68,7 +88,7 @@
                 <h3>{{weight}} kg</h3>
                 <h4>Weight</h4>
             </div>
-        </div>
+        </div> -->
 
         <div class="card">
             <div class="card-icon">
@@ -85,16 +105,15 @@
     <!--End cards-->
 </section>
 
-
-<section class="charts-section">
-    <div class="main-chart">
-        <canvas id="heart-chart" style="width: 500px;"></canvas>
+<section class="main-section">
+    <div class="heart-rate-chart">
+        <canvas class="shadow" id="activity-chart"></canvas>
         <script>
-            var ctx = document.getElementById('heart-chart').getContext("2d")
+            var ctx = document.getElementById('activity-chart').getContext("2d")
             var myChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                    labels: ['00:00', '00:04', '00:08', '00:12', '00:16', '00:20', '00:24'],
                     datasets: [{
                         label: "Heart-Rate",
                         borderColor: "rgba(255, 99, 132, 0.9)",
@@ -108,12 +127,12 @@
                         pointRadius: 3,
                         fill: false,
                         borderWidth: 2,
-                        data: [66, 110, 90, 122, 190, 133, 110],
-                    }]
+                        data: [50, 70, 58, 109, 90, 137, 110],
+                    }, ]
                 },
                 options: {
                     legend: {
-                        position: "bottom"
+                        position: "top"
                     },
                     scales: {
                         yAxes: [{
@@ -121,12 +140,12 @@
                                 fontColor: "rgba(0,0,0,0.5)",
                                 fontStyle: "bold",
                                 beginAtZero: true,
-                                maxTicksLimit: 13,
+                                maxTicksLimit: 6,
                                 padding: 20,
                             },
                             gridLines: {
                                 drawTicks: true,
-                                display: false
+                                display: true
                             }
                         }],
                         xAxes: [{
@@ -137,6 +156,10 @@
                                 padding: 20,
                                 fontColor: "rgba(0,0,0,0.5)",
                                 fontStyle: "bold"
+                            },
+                            gridLines: {
+                                drawTicks: true,
+                                display: false
                             }
                         }]
                     }
@@ -144,73 +167,42 @@
             });
 
 
-            myChart.canvas.parentNode.style.height = '70%';
-            myChart.canvas.parentNode.style.width = '70%';
+            myChart.canvas.parentNode.style.height = '45%';
+            myChart.canvas.parentNode.style.width = '68%';
         </script>
     </div>
 
-    <div class="secondary-chart">
-        <div class="chart">
-            <canvas id="second-chart" style="width: 500px;"></canvas>
-            <script>
-                var ctx = document.getElementById('second-chart');
-                var myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
-                        datasets: [{
-                            label: 'Heart Rate',
-                            data: [66, 110, 90, 122, 150, 133, 110],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
+    <div class="patient-detail-card shadow">
+        <div class="image-area">
+            <img class="mt-6 m-auto w-16 h-16 rounded-full" src="/media/default.jpg" alt="">
+        </div>
+        <div class="text-center mt-2">
+            <p class="text-blue-600 text-lg tracking-widest">{{patient.patient.get_full_name}}</p>
+            <p class="text-gray-600">{{patient.patient.phone_number}}</p>
+        </div>
+        <div class="card-header mt-7 ml-3">
+            <h3 class="text-lg text-gray-400 tracking-widest">Details</h3>
+        </div>
+        <div class="border border-gray-200 w-11/12 m-auto mt-2"></div>
 
-                            ],
-                        }]
-                    },
-                    options: {
+        {% for key, value in details_card.items %}
+        <div class="m-auto flex justify-between w-11/12">
+            <h3 class="text-gray-400 my-2">{{key}}</h3>
+            <h3 class="text-gray-400 my-2">{{value}}</h3>
+        </div>
+        {% endfor %}
 
-                    }
-                })
-                // myChart.canvas.parentNode.style.height = '40%';
-                myChart.canvas.parentNode.style.width = '50%';
-            </script>
+        <!-- Appointments section -->
+        <div class="text-center mt-6 flex">
+            <div class="border border-gray-200 w-1/5 m-auto mt-4"></div>
+            <div class="text-xl text-gray-500 tracking-widest">Appointments</div>
+            <div class="border border-gray-200 w-1/5 m-auto mt-4"></div>
+            {% block data %}
+             
+            {% endblock %}
         </div>
 
-        <div class="chart">
-            <canvas id="third-chart" style="width: 500px;"></canvas>
-            <script>
-                var ctx = document.getElementById('third-chart');
-                var myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
-                        datasets: [{
-                            label: 'Heart Rate',
-                            data: [66, 110, 90, 122, 150, 133, 110],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-
-                            ],
-                        }]
-                    },
-                    options: {
-
-                    }
-                })
-                // myChart.canvas.parentNode.style.height = '40%';
-                myChart.canvas.parentNode.style.width = '50%';
-            </script>
-        </div>
     </div>
-
 </section>
-
-
 
 {% endblock %}
