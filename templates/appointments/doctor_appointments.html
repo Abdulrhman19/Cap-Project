@@ -1,0 +1,69 @@
+{% extends 'users/doctor/doctor_base.html' %}
+{% block content %}
+
+<div class="flex flex-col flex-wrap m-auto w-5/6">
+
+    <div class="text-center mt-32 mb-12">
+        <h1 class="text-3xl text-gray-800 tracking-widest">Requested Appointments</h1>
+    </div>
+    <!-- Table headers -->
+    <div class="">
+        <div class="flex flex-wrap py-2 justify-around  bg-gradient-to-r from-green-400 to-blue-500">
+            <div class="text-2xl text-blue-100 -ml-12 ">ID</div>
+            <div class="text-2xl text-blue-100">Patient Name</div>
+            <div class="text-2xl text-blue-100">Reason</div>
+            <div class="text-2xl text-blue-100">Due Date</div>
+            <div class="text-2xl text-blue-100">Status</div>
+        </div>
+        <div class="border mt-1"></div>
+        <!-- End table headers -->
+
+        <!-- Table body -->
+        <div>
+            <!-- TODO: The logic below is not good and must be fixed -->
+            {% if appointments %}
+            {% if appointment.status != 'Accepted' %}
+                {% for appointment in appointments %}
+                <div
+                    class="flex flex-wrap justify-around py-2 border-2 border-gray-200 rounded-full mt-4 bg-gray-100 text-gray-700 hover:bg-white">
+                    <div class="text-lg -ml-6">{{forloop.counter}}</div>
+                    <div class="text-lg ml-8">{{appointment.patient_id.patient.get_full_name}}</div>
+                    {% if appointment.appointment_reason|length > 20 %}
+                    <div class="text-lg">
+                        <abbr class="border-b-2 border-solid ml-16" title="{{appointment.appointment_reason}}">
+                            {{appointment.appointment_reason|slice:20}}...
+                        </abbr>
+                    </div>
+                    {% else %}
+                    <div class="text-lg">{{appointment.appointment_reason}}...</div>
+                    {% endif %}
+                    <div class="text-lg ml-8">{{appointment.due_date|date}}</div>
+                    <form action="{% url 'appointments:get_appointment_status' %}" method="POST">
+                        <div class="flex">
+                            {% csrf_token %}
+                            <div>
+                                <button type="submit" value="Accept"
+                                    class="text-lg text-green-500 border-2 border-green-500 rounded-full px-2 py-1 hover:bg-green-500 hover:text-white">Accept</button>
+                            </div>&nbsp;|&nbsp;
+                            <div>
+                                <button type="submit" value="Reject"
+                                    class="text-lg text-red-500 border-2 border-red-500 rounded-full px-2 py-1 hover:bg-red-500 hover:text-white">Reject</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% endfor %}
+            {% else %} 
+                {% comment %} Nothing {% endcomment %}
+            {% endif %}
+            <!-- TODO Work on accept | reject buttons  -->
+            {% else %}
+            <div>
+                <p>No appointment requests found</p>
+            </div>
+            {% endif %}
+        </div>
+        <!-- End table body -->
+    </div>
+</div>
+{% endblock content %}

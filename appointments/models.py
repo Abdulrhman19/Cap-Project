@@ -7,9 +7,9 @@ class Appointment(models.Model):
     doctor_id              = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient_id             = models.ForeignKey(Patient, on_delete=models.CASCADE)
     appointment_reason     = models.TextField("Appointment Reason", max_length=512)
-    due_date               = models.DateTimeField("Due Date", auto_now_add=False)
+    due_date               = models.DateTimeField("Due Date",auto_now_add=False)
     creation_date          = models.DateTimeField(auto_now_add=True)
-
+    status                 = models.CharField(max_length=10, default='Pennded')
 
 
     def __str__(self):

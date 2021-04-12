@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from appointments.models import Appointment
-from appointments.forms import AppointmentCreationForm, AppointmentUpdateForm
+from appointments.forms import AppointmentCreationForm
 
 
 # class UserAdmin(BaseUserAdmin):

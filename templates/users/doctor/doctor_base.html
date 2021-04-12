@@ -9,15 +9,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% if title %}
-    <title>Patient - {{ title }}</title>
+    <title>Dashboard - {{ title }}</title>
     {% else %}
-    <title>Patient Dashboard</title>
+    <title>Doctor Dashboard</title>
     {% endif %}
-    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'css/dashboard_layout.css' %}">
-
-    <!-- Import TailwindCSS -->
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard_layout.css' %}">
 </head>
 
 <body>
@@ -26,7 +23,7 @@
         <div class="header">
             <nav>
                 <ul>
-                    <li class="username">Hello, {{user.get_full_name}}</li>
+                    <!-- <li class="username">Hello Dr.{{user.get_full_name}}</li> -->
                     <a href="{% url 'users:logout' %}"
                         class="logout inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
                         Logout
@@ -37,35 +34,30 @@
                     </a>
                 </ul>
             </nav>
-            <div class="underline">
-                <hr>
-            </div>
         </div>
-
+        
         <div class="sidebar">
-
+    
             <header class="logo">
                 <img src="{% static 'images/logo_transparent.png' %}" alt="logo">
             </header>
-
+                
             <div>
                 <ul>
                     <li>
                         <img class="link-icon" src="{% static 'images/icons/dashboard.png' %}" alt="">
-                        <a class="nav-link {% if request.path == '/patients/dashboard/' %} active {% endif %}"
-                            href="{% url 'users:patient_dashboard' %}">Dashboard</a>
+                        <a class="nav-link {% if request.path == '/doctors/dashboard/' %} active {% endif %}" href="{% url 'users:doctor_dashboard' user.Doctor.id %}">Dashboard</a>
                     </li>
 
                     <li>
                         <img class="link-icon" src="{% static 'images/icons/user.png' %}" alt="">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="{% url 'users:doctor_profile' user.Doctor.id %}">Profile</a>
 
                     </li>
 
                     <li>
                         <img class="link-icon" src="{% static 'images/icons/appoinment.png' %}" alt="">
-                        <a class="nav-link  {% if request.path == '/new_appointemnt/' %} active {%endif %}"
-                            href="{% url 'appointments:new_appointemnt' %}">Appoinments</a>
+                        <a class="nav-link" href="{% url 'appointments:requested_appointments' %}">Appoinments</a>
                     </li>
 
                     <li>
@@ -78,20 +70,10 @@
                         <a class="nav-link" href="#">Drug Schedule</a>
                     </li>
 
-                    <li>
-                        <img class="link-icon" src="{% static 'images/icons/map.png' %}" alt="">
-                        <a class="nav-link {% if request.path == '/patients/maps/' %} active {% endif %}"
-                            href="{% url 'users:maps' %}">Clinics near me</a>
-                    </li>
                 </ul>
-                
-                <div class="appointment-btn-label">
-                    <a class="appointment-link" href="{% url 'appointments:new_appointemnt' %}">Make an Appointment</a>
-                    <img class="appointment-icon" src="{% static 'images/icons/add.png' %}" alt="">
-                </div>
             </div>
         </div>
-
+        
 
 
         <div class="content">

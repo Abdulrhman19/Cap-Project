@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from random import randint
@@ -10,9 +10,16 @@ from .forms import (
     UserAdminCreationForm,
     # UserCreationForm,
     PatientCreationForm,
-    DoctorCreationForm
+    DoctorCreationForm,
+    PatientHealthUpdateForm,
+    PatientPersonalUpdateForm,
+    DoctorUpdateForm,
+    DoctorPersonalUpdateForm,
 )
 from .models import Patient, Doctor, User, UserManager
+
+from appointments.models import Appointment
+from appointments.views import patient_appointments, doctor_appointments
 
 User = get_user_model()
 
@@ -54,7 +61,7 @@ def patient_signup_view(request):
 
     if request.method == 'POST':
         form = PatientCreationForm(request.POST)
-
+        print(request.POST)
         if form.is_valid():
             patient = User.objects.filter(
                 role='Patient').order_by('-date_joined').first()
@@ -67,7 +74,7 @@ def patient_signup_view(request):
             country = form.cleaned_data['country']
             city = form.cleaned_data['city']
             street = form.cleaned_data['street']
-
+            print(f"### {patient}")
             new_patient = Patient.objects.create(
                 patient=patient,
                 supervised_by=supervised_by,
@@ -114,7 +121,6 @@ def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
-            print("Validation ...")
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = authenticate(request, username=username, password=password)
@@ -122,9 +128,7 @@ def login_view(request):
             if user is not None:
                 # user: is an email.
                 login(request, user)
-                print(user, type(user))
                 messages.info(request, f"You are now logged in as {username}.")
-
                 # If the logged in user is patient redirect them for patient dashboard
                 # other wise to doctor dashboard
                 # TODO: Users [Admin, Doctor, Patient] redirected to patient Dashboard after logging.
@@ -135,9 +139,9 @@ def login_view(request):
                     return redirect('http://127.0.0.1:8000/admin/')
                 elif User.objects.get(email=user).role == 'Patient':
                     # patient user
-                    return redirect('users:patient_dashboard')
+                    return redirect('users:patient_dashboard', user.Patient.id)
                 elif User.objects.get(email=user).role == 'Doctor':
-                    return redirect('users:doctor_dashboard')
+                    return redirect('users:doctor_dashboard', user.Doctor.id)
 
             else:
                 messages.error(request, 'Cannot submit empty instance!')
@@ -157,9 +161,11 @@ def logout_view(request):
 
 # PATIENT DASHBAORD FUNCTIONS
 @login_required
-def patient_dashboard(request):
-    current_patient = request.user
-    patient = Patient.objects.get(patient=current_patient)
+def patient_dashboard(request, patient_id):
+    try:
+        patient = Patient.objects.get(id=patient_id)
+    except:
+        raise Http404
 
     gender, height, weight, age = (
         patient.gender,
@@ -184,6 +190,8 @@ def patient_dashboard(request):
         'Weight': str(weight) + ' kg',
     }
 
+    # Get all the appointments for this patient from appointments views
+    appointments = patient_appointments(patient_id)
     context = {
         'patient': patient,
         'gender': gender,
@@ -195,42 +203,73 @@ def patient_dashboard(request):
         'blood_pressure': blood_pressure,
         'steps': steps,
         'details_card': details_card,
-        'title': 'Dashboard'
+        'title': 'Dashboard',
+        'appointments': appointments
     }
+    # print(appointments)
     return render(request, 'users/patient/dashboard_content.html', context)
 
 
 @login_required
-def maps(request):
+def maps(request, patient_id):
     # Return all the clinics in a 'city' in google maps.
-    current_patient = request.user
-    patient = Patient.objects.get(patient=current_patient)
+    patient = Patient.objects.get(id=patient_id)
     country = patient.country
     city = patient.city
 
     context = {
         'country': country,
         'city': city,
-        'title': 'Map'
+        'title': 'Map',
+
     }
     return render(request, 'users/patient/map.html', context)
 
 
 @login_required
-def patient_profile(request):
-    pass
+def patient_profile(request, patient_id):
+
+    if request.method == 'POST':
+        personal_form = PatientPersonalUpdateForm(
+            request.POST, request.FILES, instance=request.user)
+        health_form = PatientHealthUpdateForm(
+            request.POST, instance=request.user.Patient)
+
+        if personal_form.is_valid() and health_form.is_valid():
+            print(personal_form)
+            personal_form.save()
+            health_form.save()
+            messages.success(
+                request, f"Your account has been upadted successfully.")
+            return redirect("users:patient_profile", request.user.Patient.id)
+        else:
+            messages.error(
+                request, "Error: Please make sure to enter valid data")
+
+    else:
+        personal_form = PatientPersonalUpdateForm(instance=request.user)
+        health_form = PatientHealthUpdateForm(instance=request.user.Patient)
+
+    context = {
+        'p_form': personal_form,
+        'h_form': health_form
+    }
+
+    return render(request, 'users/patient/profile.html', context)
 # END PATIENT VIEWS
 
 
 # DOCTOR DASHBAORD FUNCTIONS
 @login_required
-def doctor_dashboard(request):
-    current_doctor = request.user
-    doctor = Doctor.objects.get(doctor=current_doctor)
+def doctor_dashboard(request, doctor_id):
+    doctor = Doctor.objects.get(id=doctor_id)
     patients = doctor.patient_set.all()
+
+    appointments = doctor_appointments(doctor_id)
 
     context = {
         'patients': patients,
+        'appointments': appointments,
     }
     return render(request, 'users/doctor/dashboard_content.htm', context)
 
@@ -243,4 +282,33 @@ def delete_patient(request, patient_id):
     Doctor.delete(patient)
     messages.success(request, f"{patient} has been removed.")
     return HttpResponseRedirect(reverse("users:doctor_dashboard"))
+
+
+@login_required
+def doctor_profile(request, doctor_id):
+    if request.method == 'POST':
+        personal_form = DoctorPersonalUpdateForm(
+            request.POST, request.FILES, instance=request.user)
+        doctor_form = DoctorUpdateForm(
+            request.POST, instance=request.user.Doctor)
+        if personal_form.is_valid() and doctor_form.is_valid():
+            print(personal_form)
+            personal_form.save()
+            doctor_form.save()
+            messages.success(
+                request, f"Your account has been upadted successfully.")
+            return redirect("users:doctor_profile", request.user.Doctor.id)
+        else:
+            messages.error(
+                request, "Error: Please make sure to enter valid data")
+
+    else:
+        personal_form = DoctorPersonalUpdateForm(instance=request.user)
+        doctor_form = DoctorUpdateForm(instance=request.user.Doctor)
+
+    context = {
+        'p_form': personal_form,
+        'doctor_form': doctor_form
+    }
+    return render(request, 'users/doctor/profile.html', context)
 # END DOCTOR VIEWS

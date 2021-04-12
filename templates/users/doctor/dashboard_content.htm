@@ -231,15 +231,15 @@
                     data: {
                         labels: ['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun'],
                         datasets: [{
-                            label: 'Male',
-                            data: [24, 20, 30, 42, 52, 30, 19],
-                            backgroundColor: "#2b2db3"
-                        },
-                        {
-                            label: 'Female',
-                            data: [19, 30, 21, 40, 18, 38, 42],
-                            backgroundColor: "#63b8f1"
-                        },
+                                label: 'Male',
+                                data: [24, 20, 30, 42, 52, 30, 19],
+                                backgroundColor: "#2b2db3"
+                            },
+                            {
+                                label: 'Female',
+                                data: [19, 30, 21, 40, 18, 38, 42],
+                                backgroundColor: "#63b8f1"
+                            },
                         ]
                     },
                     options: {
@@ -296,15 +296,33 @@
         </div>
     </section>
 
-    
-    <section class="charts-section flex-wrapper">
-        <div class="chart">
-                <h1 class="title">Accepted Appoinemnts</h1>
-            </div>
 
-            <div class="chart">
-                <h1 class="title">Pended Appoinemnts</h1>
+    <section class="mt-8 w-full">
+        <div class="shadow">
+            <h1 class="title pt-4">Accepted Appointments</h1>
+            <div class="border -mt-3 w-11/12 m-auto"></div>
+            <div>
+                {% if accepted_appointment %}
+                <table class="table border">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Due Date</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in accepted_appointments %}
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                {% endif %}
             </div>
+        </div>
     </section>
 
 

@@ -76,3 +76,37 @@ class UserAdminChangeForm(forms.ModelForm):
         # field does not have access to the initial value
         return self.initial["password"]
 
+
+class PatientHealthUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = (
+            'date_of_birth',
+            'age', 
+            'gender',     
+            'weight',     
+            'height',     
+            'blood_group',
+            'country',    
+            'city',       
+            'street',     
+        )
+
+class PatientPersonalUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'phone_number', 'personal_image')
+
+
+class DoctorUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        fields = (
+            'specialist',
+            'gender',
+        )
+
+class DoctorPersonalUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'phone_number', 'personal_image')

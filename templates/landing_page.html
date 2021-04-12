@@ -39,9 +39,9 @@
                     {% if user.is_authenticated %}
                     <li>
                         {% if user.role == 'Doctor' %}
-                        <a href="{% url 'users:doctor_dashboard' %}" >Dashboard</a>
+                        <a href="{% url 'users:doctor_dashboard' user.Doctor.id %}" >Dashboard</a>
                         {% elif user.role == 'Patient' %}
-                        <a href="{% url 'users:patient_dashboard' %}" >Dashboard</a>
+                        <a href="{% url 'users:patient_dashboard' user.Patient.id %}" >Dashboard</a>
                         {% else %}
                         <a href="http://127.0.0.1:8000/admin">Dashboard</a>
                         {% endif %}

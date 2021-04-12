@@ -80,12 +80,10 @@
     height: 100%;
     display: flex;
     margin: auto;
-    border: 1px solid;
 }
 
 .heart-rate-chart {
     width: 68%;
-    background-color: aquamarine;
 }
 
 .patient-detail-card {
@@ -327,13 +325,6 @@
     align-self: center;
 
 }
-
-
-.appoinments-section {
-    display: flex;
-    flex-flow: row wrap;
-}
-
 
 .rounded-image {
     border-radius: 2em;

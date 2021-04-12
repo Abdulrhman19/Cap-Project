@@ -12,5 +12,7 @@ class AppointmentCreationForm(forms.ModelForm):
             'due_date',
         ]
 
-class AppointmentUpdateForm(forms.Form):
-    pass
+class AppointmentStatusUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Appointment
+        fields = ('status',)

@@ -2,9 +2,9 @@
 {% load static %}
 {% block content %}
 
-
 {% if messages %}
 {% for msg in messages %}
+{% if msg.tags == 'success' %}
 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
     <!-- <strong class="font-bold"></strong> -->
     <span class="block sm:inline">{{msg}}</span>
@@ -17,6 +17,20 @@
         </svg>
     </span>
 </div>
+{% elif msg.tags == 'error' %}
+<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+    <!-- <strong class="font-bold"></strong> -->
+    <span class="block sm:inline">{{msg}}</span>
+    <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+        <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20">
+            <title>Close</title>
+            <path
+                d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
+        </svg>
+    </span>
+</div>
+{% endif %}
 {% endfor %}
 {% endif %}
 
@@ -174,7 +188,7 @@
 
     <div class="patient-detail-card shadow">
         <div class="image-area">
-            <img class="mt-6 m-auto w-16 h-16 rounded-full" src="/media/default.jpg" alt="">
+            <img class="mt-6 m-auto w-16 h-16 rounded-full" src="{{ user.personal_image.url }}" alt="">
         </div>
         <div class="text-center mt-2">
             <p class="text-blue-600 text-lg tracking-widest">{{patient.patient.get_full_name}}</p>
@@ -193,13 +207,42 @@
         {% endfor %}
 
         <!-- Appointments section -->
-        <div class="text-center mt-6 flex">
-            <div class="border border-gray-200 w-1/5 m-auto mt-4"></div>
-            <div class="text-xl text-gray-500 tracking-widest">Appointments</div>
-            <div class="border border-gray-200 w-1/5 m-auto mt-4"></div>
-            {% block data %}
-             
-            {% endblock %}
+        <div class="text-center mt-6 flex flex-col flex-wrap">
+            <div class="flex w-full">
+                <div class="border border-gray-200 w-1/5 m-auto mt-4"></div>
+                <div class="text-xl text-gray-500 tracking-widest">Appointments</div>
+                <div class="border border-gray-200 w-1/5 m-auto mt-4"></div>
+            </div>
+            <div>
+                {% if appointments %}
+                    {% for appointment in appointments %}
+                        <div class="flex flex-wrap justify-around mt-4">
+                            <div class="flex w-full mx-4 justify-between">
+                                <p class="text-gray-400">With Doctor</p>
+                                <p class="text-blue-400">{{appointment.doctor_id.doctor.get_full_name}}</p>
+                            </div>
+                            <div class="flex w-full mx-4 my-4 justify-between"> 
+                                <p class="text-gray-400">Due Date</p>
+                                <p class="text-blue-400">{{appointment.due_date|date:"M d, h:A"}}</p>
+                            </div>
+                            <div class="flex w-full mx-4 justify-between">
+                                <p class="text-gray-400">Status</p>
+                                {% if appointment.status == 'Accepted' %} 
+                                    <p class="text-green-500">Accepted</p>
+                                {% elif appointment.status == 'Rejected' %} 
+                                    <p class="text-red-500 border border-red-500 rounded-full px-2">Rejected</p>
+                                {% else %}
+                                    <p class="text-gray-500 border border-gray-500 rounded-full px-2">Pendded</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 w-11/12 m-auto mt-2"></div>
+
+                    {% endfor %}
+                {% else %}
+                <p>You have no appointments</p>
+                {% endif %}
+            </div>
         </div>
 
     </div>

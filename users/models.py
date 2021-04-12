@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
+from PIL import Image
 
 
 class UserManager(BaseUserManager):
@@ -56,6 +57,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    personal_image = models.ImageField(default='default.jpg', upload_to='user_pics')
     phone_number = PhoneNumberField(blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)  # ? Can login?
@@ -68,6 +70,20 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+        
+    def save(self, *args, **kwargs):
+        # Rewrite the save function to resize the saved images
+        super().save()
+        
+        img = Image.open(self.personal_image.path)
+        
+        # Check dimensions
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.personal_image.path)
+
 
     def __str__(self):
         return self.email
@@ -122,13 +138,13 @@ class Patient(models.Model):
         "Doctor", on_delete=models.CASCADE, blank=True)
     date_of_birth = models.DateField()
     age = models.PositiveIntegerField(default=0)
-    gender = models.CharField(max_length=6, choices=GENDER)
-    weight = models.FloatField()
-    height = models.FloatField()
+    gender      = models.CharField(max_length=6, choices=GENDER)
+    weight      = models.FloatField()
+    height      = models.FloatField()
     blood_group = models.CharField(max_length=4)
-    country = models.CharField(max_length=60)
-    city = models.CharField(max_length=60)
-    street = models.CharField(max_length=60)
+    country     = models.CharField(max_length=60)
+    city        = models.CharField(max_length=60)
+    street      = models.CharField(max_length=60)
     # image = models.ImageField("Patient personal image", )
 
     def __str__(self):
