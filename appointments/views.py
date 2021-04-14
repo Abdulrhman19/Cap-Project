@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.http import HttpResponse, Http404
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.views.generic import (
     CreateView,
     DetailView,
@@ -27,7 +28,12 @@ class DoctorAppointmentsListView(ListView):
         return list(appointments)
 
 
+@login_required
 def appointment_create_view(request):
+
+    # Get all the existing doctor
+    doctors = Doctor.objects.all()
+
     form = AppointmentCreationForm()
     if request.method == 'POST':
         form = AppointmentCreationForm(request.POST)
@@ -50,40 +56,47 @@ def appointment_create_view(request):
                 request, f"Appointment request with Dr.{doctor_id.doctor.get_full_name()} has been sent.")
             return redirect('users:patient_dashboard', request.user.Patient.id)
         else:
-            messages.error(request, f"Please make sure to enter valid data.")
-    return render(request, 'appointments/new_appointment.html', {'form': form})
+            messages.error(request, f"{form.errors}")
+        print(form)
+    return render(request, 'appointments/new_appointment.html', {'form': form, 'doctors': doctors})
+
+
+def delete_appointment(request, appointment_pk):
+    patient = request.user.Patient.id
+    # appointments = Appointment.objects.filter(patient_id=patient)
+    print("+++IN")
+    appointment = Appointment.objects.get(pk=appointment_pk)
+    if appointment.status == 'Accepted':
+        print("Do not print")
+    else:
+        print(f"+++{appointment}")
+        Appointment.delete(appointment)
+        messages.success(request, f"Appointment has been removed.")
+        return redirect("users:patient_dashboard", request.user.Patient.id)
 
 
 # TODO: Appointment status must be fixed as fast as you can
-def get_appointment_status(request):
-    form = AppointmentStatusUpdateForm()
-    if request.method == 'POST':
-        print("----POST")
-        form = AppointmentStatusUpdateForm(request.POST)
 
-        if form.is_valid():
-            status = form.cleaned_data['status']
-            print(status)
 
-            patient = Patient.objects.get(id=request.user.Patient.id)
-            doctor = Doctor.objects.get(id=request.user.Doctor.id)
+def reject_appointment(request, pk):
+    appointment = Appointment.objects.get(pk=pk)
+    print(appointment.status)
+    appointment.status = 'Rejected'
+    Appointment.save(appointment)
+    print(appointment.status)
+    return redirect("appointments:requested_appointments")
 
-            appointment = Appointment.objects.get(id=request.appointment.id)
-            print(appointment)
 
-            appointment.status = status
-            print(appointment.status)
+def accept_appointment(request, pk):
+    appointment = Appointment.objects.get(pk=pk)
+    print(appointment.status)
+    appointment.status = 'Accepted'
+    Appointment.save(appointment)
+    print(appointment.status)
+    return redirect("appointments:requested_appointments")
 
-            Appointment.save(appointment)
 
-            return redirect("appointments:requested_appointments")
-        else:
-            print(form.errors)
-    else:
-        print("+++++ GET")
-    return render(request, 'appointments/doctor_appointments.html', {'form': form})
-            
-    
+
 def patient_appointments(patient_id):
     patient = Patient.objects.get(id=patient_id)
     appointments = patient.appointment_set.all()
