@@ -25,7 +25,7 @@ User = get_user_model()
 
 
 def landing_page(request):
-    return render(request, 'landing_page.html', {})
+    return render(request, 'landing_page.html')
 
 
 def signup_view(request):
@@ -47,6 +47,7 @@ def signup_view(request):
             elif form.cleaned_data['role'] == 'Doctor':
                 doctor_signup_view(request)
                 return redirect('/register_doctor/')
+
         else:
             messages.error(request, "You must select a role")
 
@@ -276,12 +277,12 @@ def doctor_dashboard(request, doctor_id):
 
 @login_required
 def delete_patient(request, patient_id):
-    print("Inside function")
-    current_doctor = Doctor.objects.get(doctor=request.user)
+    current_doctor = Doctor.objects.get(doctor=request.user.id)
     patient = current_doctor.patient_set.get(id=patient_id)
-    Doctor.delete(patient)
+    # ? Cut the relationship between doctor and patient, but do not delete patient
+    Patient.objects.filter(id=patient_id).update(supervised_by=None)
     messages.success(request, f"{patient} has been removed.")
-    return HttpResponseRedirect(reverse("users:doctor_dashboard"))
+    return redirect("users:doctor_dashboard", request.user.Doctor.id)
 
 
 @login_required
